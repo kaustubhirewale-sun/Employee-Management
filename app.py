@@ -4,6 +4,9 @@ from werkzeug.utils import secure_filename
 import re
 from datetime import datetime
 import mysql.connector
+import pymysql
+
+pymysql.install_as_MySQLdb()
 import csv
 import io
 import os
@@ -13,15 +16,19 @@ app = Flask(__name__)
 app.secret_key = 'employee-management-system-secret'
 
 # ---------------- MYSQL CONNECTION ----------------
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Kaustubhi@123",
-    database="management_db",
-    autocommit=True   # add this
-)
-
-cursor = db.cursor(dictionary=True)
+try:
+    db = mysql.connector.connect(
+        host=os.getenv('MYSQL_HOST', 'localhost'),
+        user=os.getenv('MYSQL_USER', 'root'),
+        password=os.getenv('MYSQL_PASSWORD', 'root'),
+        database=os.getenv('MYSQL_DATABASE', 'employee_db'),
+        autocommit=True
+    )
+    cursor = db.cursor(dictionary=True)
+except Exception as e:
+    print(f"Database connection warning: {e}")
+    db = None
+    cursor = None
 
 
 # ---------------- LOGIN PAGE ----------------
