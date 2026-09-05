@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <div class="sidebar-logo">👥</div>
+
+            <div>
+                <div class="sidebar-title">EMS Admin</div>
+                <div class="sidebar-subtitle">Management Portal</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a href="/dashboard" class="active">🏠 Dashboard</a>
+            <a href="/employees">👥 Employees</a>
+            <a href="/register">➕ Add Employee</a>
+            <a href="/attendance">📅 Attendance</a>
+            <a href="/departments">🏢 Departments</a>
+            <a href="/salary">💰 Salary</a>
+            <a href="/leave">📅 Leave Management</a>
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+
+            <div>
+                <h2>Dashboard Overview</h2>
+                <p>Welcome back, Admin</p>
+            </div>
+
+            <div class="topbar-right">
+
+                <button type="button"
+                        class="notification"
+                        onclick="alert('Notifications')">
+
+                    <span class="bell-icon">🔔</span>
+                    <span class="notification-dot"></span>
+
+                </button>
+
+                <a href="/" class="logout-btn-top">Logout</a>
+
+            </div>
+
+        </header>
+
+
+        <div class="dashboard-container">
+
+
+            <!-- ================= TOP SUMMARY CARDS ================= -->
+
+            <section class="card-grid">
+
+                <!-- Total Employees -->
+                <div class="card">
+
+                    <div class="card-icon">👥</div>
+
+                    <h3>Total Employees</h3>
+
+                    <div class="card-number">
+                        {{ total_employees | default('--') }}
+                    </div>
+
+                    <div class="card-description">
+                        Registered employees
+                    </div>
+
+                </div>
+
+
+                <!-- Attendance Today -->
+            <div class="card">
+    <div class="card-icon">📅</div>
+    <h3>Attendance Today</h3>
+    <div class="card-number">{{ today_present }}</div>
+    <div class="card-description">Present employees</div>
+</div>
+
+<!-- Salary Status -->
+<div class="card">
+
+    <div class="card-icon">💰</div>
+
+    <h3>Salary Status</h3>
+
+    <div class="card-number">
+        {{ processed_salaries }}
+    </div>
+
+    <div class="card-description">
+        Processed salaries
+    </div>
+
+</div>
+
+            </section>
+
+
+<!-- ================= DEPARTMENT + MONTHLY OVERVIEW ================= -->
+
+<section class="dashboard-two-column">
+
+    <!-- ================= DEPARTMENT OVERVIEW ================= -->
+
+    <div class="dashboard-box">
+
+    <div class="box-header">
+
+        <h3>Department Overview</h3>
+
+        <a href="/departments" class="box-link">
+            Employee distribution
+        </a>
+
+    </div>
+
+    {% if department_data %}
+
+        {% for dept in department_data %}
+
+        <div class="department-row">
+
+            <div class="department-info">
+
+                <span class="department-name">
+                    {{ dept.department }}
+                </span>
+
+                <span class="department-count">
+                    {{ dept.total }} employees
+                </span>
+
+            </div>
+
+            <div class="department-bar">
+
+                <div class="department-progress"
+                     data-percentage="{{ dept.percentage }}">
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="no-departments">
+            No departments found.
+        </div>
+
+    {% endif %}
+
+</div>
+
+               
+<!-- Monthly Attendance Overview -->
+
+<div class="dashboard-box monthly-overview-box">
+
+    <div class="box-header">
+        <h3>Monthly Attendance Overview</h3>
+    <input type="month"
+       class="month-selector"
+       value="{{ current_month }}"
+       onchange="changeMonth(this.value)">
+    </div>
+
+    <div class="monthly-summary">
+
+        <div class="monthly-rate-box">
+            <div class="monthly-percentage">
+                {{ monthly_rate }}%
+            </div>
+
+            <div class="monthly-label">
+                Attendance Rate
+            </div>
+        </div>
+
+    </div>
+
+    <div class="attendance-bars">
+
+        <!-- PRESENT -->
+        <div class="bar-row">
+            <span>Present</span>
+
+            <div class="bar-bg">
+                <div class="bar-fill present-bar"></div>
+            </div>
+
+            <strong>{{ monthly_present }}</strong>
+        </div>
+
+        <!-- ABSENT -->
+        <div class="bar-row">
+            <span>Absent</span>
+
+            <div class="bar-bg">
+                <div class="bar-fill absent-bar"></div>
+            </div>
+
+            <strong>{{ monthly_absent }}</strong>
+        </div>
+
+        <!-- LEAVE -->
+        <div class="bar-row">
+            <span>Leave</span>
+
+            <div class="bar-bg">
+                <div class="bar-fill leave-bar"></div>
+            </div>
+
+            <strong>{{ monthly_leave }}</strong>
+        </div>
+
+    </div>
+
+</div>
+       </section>
+
+<!-- ================= PAYROLL + TODAY'S ATTENDANCE ================= -->
+
+<section class="payroll-attendance-row">
+
+    <!-- ================= MONTHLY PAYROLL OVERVIEW ================= -->
+
+    <div class="salary-overview-card">
+
+        <div class="salary-header">
+            <h3>Monthly Payroll Overview</h3>
+
+            <span>
+                {{ current_month }} • live from MySQL
+            </span>
+        </div>
+
+
+        <!-- Total Employees -->
+
+        <div class="payroll-info-row">
+            <span>Total Employees</span>
+
+            <strong>
+                {{ total_employees | default(0) }}
+            </strong>
+        </div>
+
+
+        <!-- Total Payroll -->
+
+        <div class="payroll-info-row">
+            <span>Total Payroll</span>
+
+            <strong>
+                ₹{{ "{:,.0f}".format(total_payroll | default(0)) }}
+            </strong>
+        </div>
+
+
+        <div class="payroll-divider"></div>
+
+
+        <!-- Paid -->
+
+        <div class="payroll-status-row">
+
+            <div class="payroll-status-left">
+                <span class="status-dot paid-dot"></span>
+                <span>Paid</span>
+            </div>
+
+            <strong class="paid-value">
+                ₹{{ "{:,.0f}".format(paid_payroll | default(0)) }}
+            </strong>
+
+        </div>
+
+
+        <!-- Pending -->
+
+        <div class="payroll-status-row">
+
+            <div class="payroll-status-left">
+                <span class="status-dot pending-dot"></span>
+                <span>Pending</span>
+            </div>
+
+            <strong class="pending-value">
+                ₹{{ "{:,.0f}".format(pending_payroll | default(0)) }}
+            </strong>
+
+        </div>
+
+
+        <!-- Payroll Completion -->
+
+        <div class="payroll-completion">
+
+            <div class="completion-header">
+
+                <span>Payroll Completion</span>
+
+                <strong>
+                    {{ completion_rate | default(0) }}%
+                </strong>
+
+            </div>
+
+
+            <div class="completion-bar">
+
+             <div class="completion-fill"
+     data-completion="{{ completion_rate | default(0) }}">
+</div>
+
+            </div>
+
+
+            <div class="completion-footer">
+
+                <span>
+                    {{ processed_salaries | default(0) }} paid
+                </span>
+
+                <span>
+                    {{ pending_salary_count | default(0) }} pending
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= TODAY'S ATTENDANCE ================= -->
+
+    <div class="dashboard-box today-attendance-box">
+
+        <div class="box-header">
+
+            <h3>Today's Attendance</h3>
+
+            <a href="/attendance" class="box-link">
+                Manage →
+            </a>
+
+        </div>
+
+
+        {% if today_attendance %}
+
+            {% for attendance in today_attendance %}
+
+            <div class="attendance-item">
+
+                <div class="attendance-info">
+
+                    <div class="attendance-name">
+                        {{ attendance.first_name }}
+                        {{ attendance.last_name }}
+                    </div>
+
+                    <div class="attendance-time">
+
+                        {% if attendance.status == 'Absent' %}
+
+                            Absent
+
+                        {% elif attendance.status == 'Leave' %}
+
+                            On Leave
+
+                        {% elif attendance.status == 'Present' %}
+
+                            {% if attendance.check_in %}
+                                {{ attendance.check_in }}
+                            {% else %}
+                                Not checked in
+                            {% endif %}
+
+                        {% elif attendance.status == 'Late' %}
+
+                            {% if attendance.check_in %}
+                                {{ attendance.check_in }}
+                            {% else %}
+                                Not checked in
+                            {% endif %}
+
+                        {% else %}
+
+                            Not checked in
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                {% if attendance.status == 'Present' %}
+
+                    <span class="status status-present">
+                        Present
+                    </span>
+
+                {% elif attendance.status == 'Absent' %}
+
+                    <span class="status status-absent">
+                        Absent
+                    </span>
+
+                {% elif attendance.status == 'Leave' %}
+
+                    <span class="status status-leave">
+                        Leave
+                    </span>
+
+                {% elif attendance.status == 'Late' %}
+
+                    <span class="status status-late">
+                        Late
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="no-attendance">
+                No attendance marked today.
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+        </div>
+
+    </main>
+
+</div>
+<script>
+function changeMonth(month) {
+    window.location.href = "/dashboard?month=" + month;
+}
+</script>
+<script>
+document.querySelectorAll('.completion-fill').forEach(function (bar) {
+    const rate = parseFloat(bar.dataset.completion) || 0;
+    bar.style.width = rate + '%';
+});
+</script>
+
+</body>
+</html>

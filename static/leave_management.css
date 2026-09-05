@@ -1,0 +1,939 @@
+/* =========================================================
+   LEAVE MANAGEMENT PAGE
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f7fb;
+    color: #172033;
+}
+
+/* ---------- MAIN CONTAINER ---------- */
+
+.leave-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 32px 40px;
+}
+
+/* ---------- TOPBAR ---------- */
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+}
+
+.title-area h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #172033;
+    margin-bottom: 8px;
+}
+
+.title-area p {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+
+/* =========================================================
+   SUMMARY CARDS
+   ========================================================= */
+
+.leave-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.leave-card {
+    background: #ffffff;
+    border: 1px solid #e8edf3;
+    border-radius: 16px;
+    padding: 22px 24px;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+}
+
+.card-title {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.card-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #172033;
+}
+
+
+/* =========================================================
+   TABLE CARD
+   ========================================================= */
+
+.table-card {
+    background: #ffffff;
+    border: 1px solid #e8edf3;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+    overflow: hidden;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 26px;
+    border-bottom: 1px solid #e8edf3;
+}
+
+.table-header h3 {
+    font-size: 18px;
+    color: #172033;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.table-header p {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   FILTER BUTTONS
+   ========================================================= */
+
+.leave-filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-btn {
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #64748b;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.filter-btn:hover {
+    background: #f8fafc;
+    color: #334155;
+}
+
+.filter-btn.active {
+    background: #172033;
+    color: #ffffff;
+    border-color: #172033;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#leaveTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1050px;
+}
+
+#leaveTable thead {
+    background: #f8fafc;
+}
+
+#leaveTable th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 11px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 700;
+    white-space: nowrap;
+    border-bottom: 1px solid #e8edf3;
+}
+
+#leaveTable td {
+    padding: 17px 16px;
+    font-size: 13px;
+    color: #475569;
+    border-bottom: 1px solid #eef2f7;
+    vertical-align: middle;
+}
+
+#leaveTable tbody tr {
+    transition: 0.15s ease;
+}
+
+#leaveTable tbody tr:hover {
+    background: #fafbfc;
+}
+
+#leaveTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   EMPLOYEE
+   ========================================================= */
+
+.employee-info {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 170px;
+}
+
+.employee-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #e0e7ff;
+    color: #4338ca;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.employee-info strong {
+    display: block;
+    color: #172033;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.employee-info small {
+    display: block;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   LEAVE DATES
+   ========================================================= */
+
+.leave-dates {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.leave-dates strong {
+    color: #334155;
+    font-size: 12px;
+}
+
+.leave-dates span {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.days-number {
+    color: #172033;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   PRIORITY
+   ========================================================= */
+
+.priority {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.priority i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.priority.high {
+    color: #dc2626;
+}
+
+.priority.high i {
+    background: #ef4444;
+}
+
+.priority.medium {
+    color: #d97706;
+}
+
+.priority.medium i {
+    background: #f59e0b;
+}
+
+.priority.low {
+    color: #16a34a;
+}
+
+.priority.low i {
+    background: #22c55e;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-approved {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.status-rejected {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.view-btn,
+.approve-btn,
+.reject-btn,
+.response-btn {
+    height: 34px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 11px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+}
+
+.view-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.approve-btn {
+    width: 34px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #16a34a;
+}
+
+.approve-btn:hover {
+    background: #dcfce7;
+}
+
+.reject-btn {
+    width: 34px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+}
+
+.reject-btn:hover {
+    background: #fee2e2;
+}
+
+.response-btn {
+    width: 34px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+}
+
+.response-btn:hover {
+    background: #f1f5f9;
+}
+
+
+/* =========================================================
+   EMPTY ROW
+   ========================================================= */
+
+.empty-row {
+    text-align: center !important;
+    padding: 60px 20px !important;
+}
+
+.empty-icon {
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.empty-row strong {
+    display: block;
+    font-size: 15px;
+    color: #334155;
+    margin-bottom: 5px;
+}
+
+.empty-row p {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   LEAVE REQUEST MODAL
+   ========================================================= */
+
+.leave-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(15, 23, 42, 0.58);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+
+    z-index: 1000;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+}
+
+.leave-modal.show {
+    display: flex;
+}
+
+.leave-modal-content {
+    background: #ffffff;
+
+    width: 100%;
+    max-width: 840px;
+
+    max-height: 90vh;
+
+    border-radius: 16px;
+
+    overflow-y: auto;
+
+    box-shadow:
+        0 25px 70px rgba(15, 23, 42, 0.28);
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+
+/* ---------- MODAL HEADER ---------- */
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px 28px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h2 {
+    font-size: 20px;
+    color: #172033;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.modal-header span {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.modal-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.modal-close:hover {
+    background: #f1f5f9;
+}
+
+
+/* ---------- MODAL BODY ---------- */
+
+.modal-body {
+    padding: 24px 28px;
+}
+.modal-employee-card {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+
+    background: #f8fafc;
+
+    border: 1px solid #dbe4ef;
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    margin-bottom: 30px;
+}
+.modal-avatar {
+    width: 64px;
+    height: 64px;
+
+    border-radius: 50%;
+
+    background: #e0e7ff;
+    color: #4338ca;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+    font-size: 18px;
+
+    flex-shrink: 0;
+}
+
+.modal-employee-info h3 {
+    font-size: 17px;
+    color: #172033;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.modal-employee-info p {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.modal-dot {
+    margin: 0 6px;
+    color: #cbd5e1;
+}
+
+.modal-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+/* ---------- INFO GRID ---------- */
+
+.leave-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 14px;
+
+    margin-bottom: 30px;
+}
+
+.info-box {
+    background: #f8fafc;
+
+    border: 1px solid #dbe4ef;
+
+    border-radius: 12px;
+
+    padding: 16px;
+}
+
+.info-label {
+    font-size: 12px;
+    color: #8a9ab0;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.4px;
+
+    margin-bottom: 7px;
+
+    font-weight: 600;
+}
+
+.info-value {
+    font-size: 16px;
+
+    color: #172033;
+
+    font-weight: 700;
+}
+
+
+/* ---------- MODAL SECTIONS ---------- */
+
+.modal-section {
+    margin-bottom: 24px;
+}
+
+.modal-section h4 {
+    font-size: 14px;
+    color: #172033;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.reason-box {
+    background: #f8fafc;
+
+    border: 1px solid #dbe4ef;
+
+    border-radius: 12px;
+
+    padding: 18px 20px;
+
+    font-size: 15px;
+
+    color: #334155;
+
+    line-height: 1.6;
+}
+
+
+/* ---------- DOCUMENT ---------- */
+
+.document-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.document-icon {
+    font-size: 20px;
+}
+
+.document-box strong {
+    display: block;
+    color: #166534;
+    font-size: 14px;
+}
+
+.document-box small {
+    display: block;
+    color: #64748b;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.document-box a {
+    margin-left: auto;
+    color: #16a34a;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.document-box a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   ADMIN DECISION
+   ========================================================= */
+
+.admin-decision label {
+    display: block;
+    font-size: 13px;
+    color: #475569;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+#adminRemarks {
+    width: 100%;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 90px;
+    color: #334155;
+    margin-bottom: 16px;
+}
+
+#adminRemarks:focus {
+    outline: none;
+    border-color: #2539f4;
+}
+
+.decision-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.modal-approve-btn {
+    background: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.modal-approve-btn:hover {
+    background: #bbf7d0;
+}
+
+.modal-reject-btn {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.modal-reject-btn:hover {
+    background: #fecaca;
+}
+
+.save-decision-btn {
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.save-decision-btn:hover {
+    background: #f8fafc;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .leave-container {
+        padding: 25px;
+    }
+
+    .leave-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .table-header {
+        align-items: flex-start;
+        gap: 15px;
+        flex-direction: column;
+    }
+
+    .leave-filters {
+        width: 100%;
+        overflow-x: auto;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .leave-container {
+        padding: 18px;
+    }
+
+    .topbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .title-area h1 {
+        font-size: 25px;
+    }
+
+    .leave-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .table-header {
+        padding: 18px;
+    }
+
+    .leave-filters {
+        flex-wrap: wrap;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-header {
+        padding: 20px;
+    }
+
+    .leave-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .decision-buttons {
+        flex-direction: column;
+    }
+
+    .modal-approve-btn,
+    .modal-reject-btn,
+    .save-decision-btn {
+        width: 100%;
+    }
+}
+
+.reply-row{
+    display:none;
+}
+
+.reply-panel{
+    background:#f8fafc;
+    padding:18px;
+    border-top:1px solid #e2e8f0;
+}
+
+.reply-text{
+    width:100%;
+    min-height:100px;
+    padding:12px;
+    border:1px solid #dbe4ef;
+    border-radius:10px;
+    resize:vertical;
+    font-size:14px;
+    font-family:inherit;
+}
+
+.reply-text:focus{
+    outline:none;
+    border-color:#2539f4;
+}
+
+.reply-buttons{
+    margin-top:12px;
+    display:flex;
+    gap:10px;
+}
+
+.send-reply-btn{
+    background:#22c55e;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.cancel-reply-btn{
+    background:#e5e7eb;
+    color:#334155;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}

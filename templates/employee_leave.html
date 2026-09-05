@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Leave Request Management</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='employee_leave.css') }}">
+</head>
+
+<body>
+
+<!-- =========================================================
+     SIDEBAR
+     ========================================================= -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-header">
+
+        <div class="sidebar-logo">
+            👥
+        </div>
+
+        <div class="sidebar-title">
+            Employee Portal
+        </div>
+
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+        <a href="/employee-dashboard">
+            🏠
+            <span>Dashboard</span>
+        </a>
+
+        <a href="/employee-attendance">
+            📅
+            <span>Attendance</span>
+        </a>
+
+        <a href="/employee-salary">
+            💰
+            <span>Salary</span>
+        </a>
+
+        <a href="/employee-leave" class="active">
+            📋
+            <span>Leave Management</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- =========================================================
+     MAIN CONTENT
+     ========================================================= -->
+
+<div class="main-content">
+
+
+    <!-- =====================================================
+         TOPBAR
+         ===================================================== -->
+
+    <header class="topbar">
+
+        <div>
+
+            <h1>Leave Request Management</h1>
+
+            <p>
+                Manage and track your leave applications
+            </p>
+
+        </div>
+
+
+        <a href="/employee-dashboard" class="back-btn">
+            ← Back
+        </a>
+
+    </header>
+
+
+    <!-- =====================================================
+         PAGE CONTAINER
+         ===================================================== -->
+
+    <main class="dashboard-container">
+
+
+        <!-- =================================================
+             LEAVE STATISTICS
+             ================================================= -->
+
+        <section class="stats-grid">
+
+
+            <!-- TOTAL -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon total-icon">
+                    📋
+                </div>
+
+                <div>
+
+                    <span>Total Requests</span>
+
+                    <strong>
+                        {{ total_requests }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- APPROVED -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon approved-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <span>Approved Requests</span>
+
+                    <strong>
+                        {{ approved_requests }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- PENDING -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon pending-icon">
+                    !
+                </div>
+
+                <div>
+
+                    <span>Pending Requests</span>
+
+                    <strong>
+                        {{ pending_requests }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- REJECTED -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon rejected-icon">
+                    ×
+                </div>
+
+                <div>
+
+                    <span>Rejected Requests</span>
+
+                    <strong>
+                        {{ rejected_requests }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             NEW LEAVE REQUEST
+             ================================================= -->
+
+        <section class="section leave-form">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>New Leave Request</h2>
+
+                    <p>
+                        Submit a new leave application
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form action="/submit-leave"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  id="leaveRequestForm">
+
+
+                <!-- ROW 1 -->
+
+                <div class="form-row">
+
+
+                    <!-- LEAVE TYPE -->
+
+                    <div class="form-group">
+
+                        <label for="leave_type">
+                            Leave Type
+                            <span class="required">*</span>
+                        </label>
+
+                        <select id="leave_type"
+                                name="leave_type"
+                                required>
+
+                            <option value="">
+                                Select leave type
+                            </option>
+
+                            <option value="Sick Leave">
+                                Sick Leave
+                            </option>
+
+                            <option value="Casual Leave">
+                                Casual Leave
+                            </option>
+
+                            <option value="Annual Leave">
+                                Annual Leave
+                            </option>
+
+                            <option value="Emergency Leave">
+                                Emergency Leave
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PRIORITY -->
+
+                    <div class="form-group">
+
+                        <label for="priority">
+                            Priority Level
+                            <span class="required">*</span>
+                        </label>
+
+                        <select id="priority"
+                                name="priority"
+                                required>
+
+                            <option value="">
+                                Select priority
+                            </option>
+
+                            <option value="Low">
+                                Low
+                            </option>
+
+                            <option value="Medium">
+                                Medium
+                            </option>
+
+                            <option value="High">
+                                High
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROW 2 -->
+
+                <div class="form-row">
+
+
+                    <!-- START DATE -->
+
+                    <div class="form-group">
+
+                        <label for="start_date">
+                            Start Date
+                            <span class="required">*</span>
+                        </label>
+
+                        <input type="date"
+                               id="start_date"
+                               name="start_date"
+                               required>
+
+                    </div>
+
+
+                    <!-- END DATE -->
+
+                    <div class="form-group">
+
+                        <label for="end_date">
+                            End Date
+                            <span class="required">*</span>
+                        </label>
+
+                        <input type="date"
+                               id="end_date"
+                               name="end_date"
+                               required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     LEAVE DURATION
+                     ================================================= -->
+
+                <div class="form-group duration-group">
+
+                    <label for="leave_duration">
+                        Leave Duration
+                    </label>
+
+                    <div class="duration-box">
+
+                        <span id="durationValue">
+                            0 working days
+                        </span>
+
+                    </div>
+
+                    <input type="hidden"
+                           id="leave_duration"
+                           name="leave_duration"
+                           value="0">
+
+                    <small>
+                        Working days exclude Saturday and Sunday.
+                    </small>
+
+                </div>
+
+
+                <!-- =================================================
+                     ATTACHMENT
+                     ================================================= -->
+
+                <div class="form-group attachment-group">
+
+                    <label for="attachment">
+                        Attachment <span class="optional">(optional)</span>
+                    </label>
+
+                    <div class="file-upload">
+
+                        <input type="file"
+                               id="attachment"
+                               name="attachment">
+
+                        <span id="file-name">
+                            No file chosen
+                        </span>
+
+                    </div>
+
+                    <small>
+                        You may attach a supporting document (e.g. medical certificate).
+                    </small>
+
+                </div>
+
+
+                <!-- =================================================
+                     REASON
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    <label for="reason">
+                        Reason for Leave
+                        <span class="required">*</span>
+                    </label>
+
+                    <textarea id="reason"
+                              name="reason"
+                              placeholder="Enter the reason for your leave..."
+                              required></textarea>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     BUTTONS
+                     ================================================= -->
+
+                <div class="form-actions">
+
+                    <button type="submit"
+                            class="submit-btn">
+                        Submit Request
+                    </button>
+
+                    <button type="reset"
+                            class="reset-btn">
+                        Reset Form
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- =================================================
+             MY LEAVE REQUESTS
+             ================================================= -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>My Leave Requests</h2>
+
+                    <p>
+                        View and track your submitted applications
+                    </p>
+
+                </div>
+
+                <span class="record-count">
+                    {{ total_requests }} Requests
+                </span>
+
+            </div>
+
+
+            <!-- SEARCH / FILTER -->
+
+            <div class="leave-filters">
+
+                <div class="search-box">
+
+                    🔍
+
+                    <input type="text"
+                           id="leaveSearch"
+                           placeholder="Search leave requests...">
+
+                </div>
+
+
+                <select id="statusFilter">
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Approved">
+                        Approved
+                    </option>
+
+                    <option value="Rejected">
+                        Rejected
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            <div class="table-wrapper">
+
+                <table id="leaveTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Type</th>
+
+                            <th>Dates</th>
+
+                            <th>Days</th>
+
+                            <th>Status</th>
+
+                            <th>Applied</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for leave in leave_requests %}
+
+                        <tr>
+
+                            <td>
+                                LR-{{ leave.id }}
+                            </td>
+
+
+                            <td>
+                                {{ leave.leave_type }}
+                            </td>
+
+
+                            <td>
+
+                                {{ leave.start_date }}
+                                →
+                                {{ leave.end_date }}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ leave.leave_duration }}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if leave.status == 'Approved' %}
+
+                                    <span class="status approved">
+                                        Approved
+                                    </span>
+
+                                {% elif leave.status == 'Rejected' %}
+
+                                    <span class="status rejected">
+                                        Rejected
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status pending">
+                                        Pending
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ leave.applied_on.strftime('%d %b %Y')
+                                   if leave.applied_on else '--' }}
+
+                            </td>
+
+
+                            <td>
+
+                                <button type="button"
+                                        class="action-btn view-leave-btn"
+                                        data-leave-id="{{ leave.id }}"
+                                        title="View Details">
+
+                                    👁
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="7"
+                                class="empty-state">
+
+                                <div class="empty-icon">
+                                    📋
+                                </div>
+
+                                <strong>
+                                    No Leave Requests
+                                </strong>
+
+                                <p>
+                                    You have not submitted any leave requests yet.
+                                </p>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     LEAVE DETAILS MODALS (one per leave request)
+     ========================================================= -->
+
+{% for leave in leave_requests %}
+
+<div class="leave-modal-overlay" id="details-{{ leave.id }}">
+
+    <div class="leave-modal-box">
+
+        <div class="details-header">
+
+            <div>
+
+                <h3>
+                    Leave Request Details
+                </h3>
+
+                <p>
+                    LR-{{ leave.id }}
+                </p>
+
+            </div>
+
+            <button type="button"
+                    class="close-details"
+                    data-leave-id="{{ leave.id }}">
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- EMPLOYEE -->
+
+        <div class="details-employee">
+
+            <div class="details-avatar">
+
+                {{ employee.first_name[0] }}{{ employee.last_name[0] }}
+
+            </div>
+
+            <div>
+
+                <h3>
+                    {{ employee.first_name }}
+                    {{ employee.last_name }}
+                </h3>
+
+                <p>
+
+                    {{ employee.employee_code }}
+                    ·
+                    {{ employee.department }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- DETAILS GRID -->
+
+        <div class="details-grid">
+
+
+            <div class="info-item">
+
+                <span>Status</span>
+
+                {% if leave.status == 'Approved' %}
+
+                    <strong class="detail-approved">
+                        ✓ Approved
+                    </strong>
+
+                {% elif leave.status == 'Rejected' %}
+
+                    <strong class="detail-rejected">
+                        × Rejected
+                    </strong>
+
+                {% else %}
+
+                    <strong class="detail-pending">
+                        ! Pending
+                    </strong>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Leave Type</span>
+
+                <strong>
+                    {{ leave.leave_type }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Total Days</span>
+
+                <strong>
+                    {{ leave.leave_duration }}
+                    working days
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Start Date</span>
+
+                <strong>
+                    {{ leave.start_date }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>End Date</span>
+
+                <strong>
+                    {{ leave.end_date }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Applied On</span>
+
+                <strong>
+
+                    {{ leave.applied_on.strftime('%d %b %Y')
+                       if leave.applied_on else '--' }}
+
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Priority</span>
+
+                <strong>
+                    {{ leave.priority }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- REASON -->
+
+        <div class="details-block">
+
+            <h4>
+                Reason for Leave
+            </h4>
+
+            <div class="reason-box">
+
+                {{ leave.reason }}
+
+            </div>
+
+        </div>
+
+
+        <!-- ATTACHMENT -->
+
+        {% if leave.attachment %}
+
+        <div class="details-block">
+
+            <h4>
+                Uploaded Document
+            </h4>
+
+            <div class="attachment-box">
+
+                📎
+
+                <a href="{{ url_for('static', filename='uploads/' + leave.attachment) }}"
+                   target="_blank">
+                    {{ leave.attachment }}
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ADMIN RESPONSE -->
+
+        <div class="details-block">
+
+            <h4>
+                Admin Response
+            </h4>
+
+            <div class="admin-response-box
+                {% if leave.status == 'Approved' %}
+                    approved
+                {% elif leave.status == 'Rejected' %}
+                    rejected
+                {% else %}
+                    pending
+                {% endif %}">
+
+                {% if leave.admin_response %}
+
+                    "{{ leave.admin_response }}"
+
+                {% elif leave.status == 'Pending' %}
+
+                    Your request is currently awaiting admin review.
+
+                {% else %}
+
+                    No admin response provided.
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+
+<script src="{{ url_for('static', filename='js/employee_leave.js') }}"></script>
+
+</body>
+</html>

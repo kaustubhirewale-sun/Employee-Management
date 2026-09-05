@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Management</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='salary.css') }}">
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+        <div class="title-area">
+            <h1>Salary Management</h1>
+            <p>Dashboard / Salary</p>
+        </div>
+
+        <a href="/dashboard" class="back-btn">
+            ← Back
+        </a>
+
+    </header>
+
+
+    <!-- CARDS -->
+    <section class="salary-cards">
+
+        <div class="salary-card">
+            <h4>Total Payroll</h4>
+            <div class="salary-value">₹ {{ total_payroll }}</div>
+        </div>
+
+        <div class="salary-card">
+            <h4>Paid Salary</h4>
+            <div class="salary-value">₹ {{ paid_salary }}</div>
+        </div>
+
+        <div class="salary-card">
+            <h4>Pending Salary</h4>
+            <div class="salary-value">₹ {{ pending_salary }}</div>
+        </div>
+
+        <div class="salary-card">
+            <h4>Employees Paid</h4>
+            <div class="salary-value">
+                {{ employees_paid }}/{{ total_employees }}
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- FILTERS -->
+    <section class="salary-filters">
+
+  <form action="/salary" method="GET" class="salary-filter-form salary-filters">
+
+        <input
+            type="month"
+            name="month"
+            value="{{ selected_month }}"
+        >
+
+        <select name="department">
+
+            <option value="">
+                All Departments
+            </option>
+
+            {% for dept in departments %}
+
+            <option
+                value="{{ dept.dept_id }}"
+                {% if selected_department == dept.dept_id|string %}
+                    selected
+                {% endif %}
+            >
+                {{ dept.dept_name }}
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <select
+            name="payment_status"
+            id="paymentStatus"
+        >
+
+            <option value="">
+                All Status
+            </option>
+
+            <option
+                value="Pending"
+                {% if selected_payment_status == 'Pending' %}
+                    selected
+                {% endif %}
+            >
+                Pending
+            </option>
+
+            <option
+                value="Initiated"
+                {% if selected_payment_status == 'Initiated' %}
+                    selected
+                {% endif %}
+            >
+                Initiated
+            </option>
+
+            <option
+                value="Paid"
+                {% if selected_payment_status == 'Paid' %}
+                    selected
+                {% endif %}
+            >
+                Paid
+            </option>
+
+        </select>
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Search Employee"
+            value="{{ search_value }}"
+        >
+
+    <div class="filter-actions">
+
+    <button
+        type="submit"
+        class="apply-filter-btn"
+    >
+        Apply Filters
+    </button>
+
+    <a
+        href="/salary"
+        class="clear-filter-btn"
+    >
+        Clear
+    </a>
+
+    <a
+        href="/export-salary-csv?month={{ selected_month }}&department={{ selected_department }}&payment_status={{ selected_payment_status }}&search={{ search_value }}"
+        class="export-csv-btn"
+    >
+        Export CSV
+    </a>
+
+</div>
+
+</form>
+
+</section>
+    <!-- ================= SALARY TABLE + CREATE SALARY ================= -->
+
+    <section class="salary-content">
+
+
+        <!-- ================= SALARY RECORDS ================= -->
+
+        <div class="salary-table-box">
+
+            <div class="table-title">
+
+                <div>
+                    <h3>Salary Records</h3>
+                    <p>Manage employee salary payments</p>
+                </div>
+
+                <span class="record-count">
+                    {{ salaries|length }} Records
+                </span>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table class="salary-table">
+
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Basic</th>
+                            <th>Allowance</th>
+                            <th>Deduction</th>
+                            <th>Net Salary</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        {% if salaries %}
+
+                            {% for salary in salaries %}
+
+                            <tr>
+
+                                <td>
+                                    {{ salary.employee_code }}
+                                </td>
+
+                                <td class="employee-name">
+                                    {{ salary.first_name }}
+                                    {{ salary.last_name }}
+                                </td>
+
+                                <td>
+                                    {{ salary.department or '--' }}
+                                </td>
+
+                                <td>
+                                    ₹ {{ salary.basic_salary }}
+                                </td>
+
+                                <td>
+                                    ₹ {{ salary.allowance }}
+                                </td>
+
+                                <td>
+                                    ₹ {{ salary.deduction }}
+                                </td>
+
+                                <td class="net-salary">
+                                    ₹ {{ salary.net_salary }}
+                                </td>
+
+                                <td>
+
+                                    {% if salary.payment_status == 'Paid' %}
+
+                                        <span class="salary-status status-paid">
+                                            Paid
+                                        </span>
+
+                                    {% elif salary.payment_status == 'Initiated' %}
+
+                                        <span class="salary-status status-initiated">
+                                            Initiated
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="salary-status status-pending">
+                                            Pending
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+             <a href="/salary?edit={{ salary.id }}"
+   class="edit-salary-btn">
+    Edit
+</a>
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+
+                                <td colspan="9" class="no-records">
+                                    No salary records found.
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= CREATE SALARY RECORD ================= -->
+
+        <div class="salary-form-box">
+
+            <div class="form-header">
+
+                <h3>Create Salary Record</h3>
+
+                <p>Add salary details for an employee</p>
+
+            </div>
+
+<form action="{% if edit_salary %}/update-salary/{{ edit_salary.id }}{% else %}/save-salary{% endif %}"
+      method="POST"
+      id="salaryForm">
+
+      
+
+
+                <!-- ================= EMPLOYEE ================= -->
+
+                <div class="salary-form-row">
+
+
+                    <!-- EMPLOYEE ID -->
+
+                    <div class="salary-form-group">
+
+                        <label>Employee ID</label>
+
+                        <select name="employee_id"
+                                id="employeeSelect"
+                                required>
+
+                            <option value="">
+                                Select Employee ID
+                            </option>
+
+                            {% for emp in employees %}
+
+                       <option value="{{ emp.id }}"
+        data-department="{{ emp.dept_id }}"
+        {% if edit_salary and edit_salary.employee_id == emp.id %}selected{% endif %}>
+
+    {{ emp.employee_code }}
+
+</option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- EMPLOYEE NAME -->
+
+                    <div class="salary-form-group">
+
+                        <label>Employee Name</label>
+
+                        <select id="employeeNameSelect"
+                                required>
+
+                            <option value="">
+                                Select Employee Name
+                            </option>
+
+                            {% for emp in employees %}
+
+                          <option value="{{ emp.id }}"
+        {% if edit_salary and edit_salary.employee_id == emp.id %}selected{% endif %}>
+
+    {{ emp.first_name }}
+    {{ emp.last_name }}
+
+</option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= DEPARTMENT + MONTH ================= -->
+
+                <div class="salary-form-row">
+
+                    <div class="salary-form-group">
+
+                        <label>Department</label>
+
+                        <select name="department_id"
+                                id="departmentSelect"
+                                required>
+
+                            <option value="">
+                                Select Department
+                            </option>
+
+                            {% for dept in departments %}
+
+                          <option value="{{ dept.dept_id }}"
+        {% if edit_salary and edit_salary.department_id == dept.dept_id %}selected{% endif %}>
+    {{ dept.dept_name }}
+</option>
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="salary-form-group">
+
+                        <label>Salary Month</label>
+
+                       <input type="month"
+       name="salary_month"
+       id="salaryMonth"
+       required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= BASIC + ALLOWANCE + DEDUCTION ================= -->
+
+                <div class="salary-form-row three-columns">
+
+                    <div class="salary-form-group">
+
+                        <label>Basic Salary</label>
+
+                        <input type="number"
+                               name="basic_salary"
+                               id="basicSalary"
+                               min="0"
+                               placeholder="₹ 0"
+                               >
+
+                    </div>
+
+
+                    <div class="salary-form-group">
+
+                        <label>Allowance</label>
+
+                        <input type="number"
+                               name="allowance"
+                               id="allowance"
+                               min="0"
+                               placeholder="₹ 0">
+
+                    </div>
+
+
+                    <div class="salary-form-group">
+
+                        <label>Deduction</label>
+
+                        <input type="number"
+                               name="deduction"
+                               id="deduction"
+                               min="0"
+                               placeholder="₹ 0">
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= NET SALARY ================= -->
+
+               
+<div class="net-salary-box">
+    <label>Net Salary</label>
+
+    <input type="number"
+           id="netSalary"
+           placeholder="0"
+           readonly>
+</div>
+
+<input type="hidden" name="net_salary" id="netSalaryInput">
+
+
+
+
+                <!-- ================= STATUS + PAYMENT DATE ================= -->
+
+                <div class="salary-form-row">
+
+                    <div class="salary-form-group">
+
+                        <label>Payment Status</label>
+
+                        <select name="payment_status"
+                                required>
+
+                            <option value="Pending">
+                                Pending
+                            </option>
+
+                            <option value="Initiated">
+                                Initiated
+                            </option>
+
+                            <option value="Paid">
+                                Paid
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="salary-form-group">
+
+                        <label>Payment Date</label>
+
+                        <input type="date"
+                               name="payment_date">
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= NOTES ================= -->
+
+                <div class="salary-form-group">
+
+                    <label>Notes</label>
+
+                    <textarea name="notes"
+                              rows="4"
+                              placeholder="Add notes..."></textarea>
+
+                </div>
+
+
+                <!-- ================= SAVE ================= -->
+
+                <button type="submit"
+                        class="save-salary-btn">
+
+                    Save Salary Record
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+<!-- ================================================= -->
+<!-- EDIT SALARY MODAL -->
+<!-- ================================================= -->
+
+<div
+    id="editSalaryModal"
+    class="salary-modal"
+    {% if edit_salary %}
+        style="display: flex;"
+    {% endif %}
+>
+
+    <div class="salary-modal-content">
+
+        <!-- HEADER -->
+
+        <div class="salary-modal-header">
+
+            <div>
+                <h3>Edit Salary Record</h3>
+                <p>Update salary details</p>
+            </div>
+
+            <a href="/salary" class="close-salary-modal">
+                ×
+            </a>
+
+        </div>
+
+
+        <form
+            action="/update-salary/{{ edit_salary.id if edit_salary else '' }}"
+            method="POST"
+            id="editSalaryForm"
+        >
+
+
+            <!-- ================= EMPLOYEE ================= -->
+
+            <div class="salary-form-row">
+
+                <!-- EMPLOYEE ID -->
+
+                <div class="salary-form-group">
+
+                    <label>Employee ID</label>
+
+                    <select
+                        name="employee_id"
+                        id="editEmployeeSelect"
+                        required
+                    >
+
+                        <option value="">
+                            Select Employee ID
+                        </option>
+
+                        {% for emp in employees %}
+
+                        <option
+                            value="{{ emp.id }}"
+                            data-department="{{ emp.dept_id }}"
+                            {% if edit_salary and edit_salary.employee_id == emp.id %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ emp.employee_code }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- EMPLOYEE NAME -->
+
+                <div class="salary-form-group">
+
+                    <label>Employee Name</label>
+
+                    <select
+                        id="editEmployeeNameSelect"
+                        required
+                    >
+
+                        <option value="">
+                            Select Employee Name
+                        </option>
+
+                        {% for emp in employees %}
+
+                        <option
+                            value="{{ emp.id }}"
+                            {% if edit_salary and edit_salary.employee_id == emp.id %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ emp.first_name }}
+                            {{ emp.last_name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= DEPARTMENT + MONTH ================= -->
+
+            <div class="salary-form-row">
+
+                <!-- DEPARTMENT -->
+
+                <div class="salary-form-group">
+
+                    <label>Department</label>
+
+                    <select
+                        name="department_id"
+                        id="editDepartmentSelect"
+                        required
+                    >
+
+                        <option value="">
+                            Select Department
+                        </option>
+
+                        {% for dept in departments %}
+
+                        <option
+                            value="{{ dept.dept_id }}"
+                            {% if edit_salary and edit_salary.employee_id %}
+                                {% for emp in employees %}
+                                    {% if emp.id == edit_salary.employee_id and emp.dept_id == dept.dept_id %}
+                                        selected
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        >
+
+                            {{ dept.dept_name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- SALARY MONTH -->
+
+                <div class="salary-form-group">
+
+                    <label>Salary Month</label>
+
+                    <input
+                        type="month"
+                        name="salary_month"
+                        id="editSalaryMonth"
+                        value="{% if edit_salary and edit_salary.salary_month %}{{ edit_salary.salary_month.strftime('%Y-%m') }}{% endif %}"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= BASIC + ALLOWANCE + DEDUCTION ================= -->
+
+            <div class="salary-form-row three-columns">
+
+                <!-- BASIC -->
+
+                <div class="salary-form-group">
+
+                    <label>Basic Salary</label>
+
+                    <input
+                        type="number"
+                        name="basic_salary"
+                        id="editBasicSalary"
+                        min="0"
+                        placeholder="₹ 0"
+                        value="{{ edit_salary.basic_salary if edit_salary else '' }}"
+                    >
+
+                </div>
+
+
+                <!-- ALLOWANCE -->
+
+                <div class="salary-form-group">
+
+                    <label>Allowance</label>
+
+                    <input
+                        type="number"
+                        name="allowance"
+                        id="editAllowance"
+                        min="0"
+                        placeholder="₹ 0"
+                        value="{{ edit_salary.allowance if edit_salary else '' }}"
+                    >
+
+                </div>
+
+
+                <!-- DEDUCTION -->
+
+                <div class="salary-form-group">
+
+                    <label>Deduction</label>
+
+                    <input
+                        type="number"
+                        name="deduction"
+                        id="editDeduction"
+                        min="0"
+                        placeholder="₹ 0"
+                        value="{{ edit_salary.deduction if edit_salary else '' }}"
+                    >
+
+                </div>
+
+            </div>
+
+
+<!-- ================= NET SALARY ================= -->
+
+<div class="net-salary-box">
+
+    <label>Net Salary</label>
+
+    <input
+        type="number"
+        id="editNetSalary"
+        placeholder="0"
+        value="{{ edit_salary.net_salary if edit_salary else '' }}"
+        readonly
+    >
+
+</div>
+
+<input
+    type="hidden"
+    name="net_salary"
+    id="editNetSalaryInput"
+    value="{{ edit_salary.net_salary if edit_salary else '' }}"
+>
+            <!-- ================= STATUS + PAYMENT DATE ================= -->
+
+            <div class="salary-form-row">
+
+                <!-- PAYMENT STATUS -->
+
+                <div class="salary-form-group">
+
+                    <label>Payment Status</label>
+
+                    <select
+                        name="payment_status"
+                        id="editPaymentStatus"
+                        required
+                    >
+
+                        <option
+                            value="Pending"
+                            {% if edit_salary and edit_salary.payment_status == 'Pending' %}
+                                selected
+                            {% endif %}
+                        >
+                            Pending
+                        </option>
+
+                        <option
+                            value="Initiated"
+                            {% if edit_salary and edit_salary.payment_status == 'Initiated' %}
+                                selected
+                            {% endif %}
+                        >
+                            Initiated
+                        </option>
+
+                        <option
+                            value="Paid"
+                            {% if edit_salary and edit_salary.payment_status == 'Paid' %}
+                                selected
+                            {% endif %}
+                        >
+                            Paid
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- PAYMENT DATE -->
+
+                <div class="salary-form-group">
+
+                    <label>Payment Date</label>
+
+                    <input
+                        type="date"
+                        name="payment_date"
+                        value="{% if edit_salary and edit_salary.payment_date %}{{ edit_salary.payment_date.strftime('%Y-%m-%d') }}{% endif %}"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= NOTES ================= -->
+
+            <div class="salary-form-group">
+
+                <label>Notes</label>
+
+                <textarea
+                    name="notes"
+                    rows="4"
+                    placeholder="Add notes..."
+                >{{ edit_salary.notes if edit_salary and edit_salary.notes else '' }}</textarea>
+
+            </div>
+
+
+            <!-- ================= BUTTONS ================= -->
+
+            <div class="salary-form-actions">
+
+                <a
+                    href="/salary"
+                    class="cancel-salary-btn"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="update-salary-btn"
+                >
+                    Update Salary Record
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/salary.js') }}"></script>
+
+</body>
+</html>

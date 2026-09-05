@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Department Management</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='department.css') }}?v=2">
+
+</head>
+
+
+<body>
+
+<div class="page">
+
+
+    <!-- ================================================= -->
+    <!-- TOPBAR -->
+    <!-- ================================================= -->
+
+    <header class="topbar">
+
+        <div class="title-area">
+
+            <h1>
+                Department Management
+            </h1>
+
+            <p>
+                Dashboard / Departments
+            </p>
+
+        </div>
+
+
+        <a
+            href="/dashboard"
+            class="back-btn"
+        >
+            ← Back
+        </a>
+
+    </header>
+
+
+    <!-- ================================================= -->
+    <!-- HEADING -->
+    <!-- ================================================= -->
+
+    <div class="department-heading">
+
+        <div>
+
+            <h2>
+                Departments
+            </h2>
+
+            <p>
+                {{ departments|length }} Departments
+                ·
+                {{ total_employees }} Total Employees
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="add-department-btn"
+            onclick="openAddDepartment()"
+        >
+            + Add Department
+        </button>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- DEPARTMENT CARDS -->
+    <!-- ================================================= -->
+
+    <div class="department-section">
+
+        <div class="department-grid">
+
+
+            {% for dept in departments %}
+
+            <div class="department-card">
+
+
+                <!-- CARD TOP -->
+
+                <div class="department-card-top">
+
+                    <div class="department-icon">
+                        🏢
+                    </div>
+
+
+                    <div class="card-actions">
+
+
+                        <!-- EDIT BUTTON -->
+
+                        <button
+                            type="button"
+                            title="Edit"
+                            class="edit-department-btn"
+
+                            data-id="{{ dept.dept_id }}"
+
+                            data-name="{{ dept.dept_name }}"
+
+                            data-head="{{ dept.dept_head or '' }}"
+
+                            data-description="{{ dept.description or '' }}"
+
+                            data-created-date="{{ dept.created_date.strftime('%Y-%m-%d') if dept.created_date else '' }}"
+                        >
+                            ✎
+                        </button>
+
+
+                        <!-- DELETE BUTTON -->
+
+                        <button
+                            type="button"
+                            title="Delete"
+                            class="delete-department-btn"
+                            data-id="{{ dept.dept_id }}"
+                        >
+                            🗑
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- DEPARTMENT INFO -->
+
+                <div class="department-info">
+
+                    <h3>
+                        {{ dept.dept_name }}
+                    </h3>
+
+
+                    <p class="department-description">
+
+                        {% if dept.description %}
+
+                            {{ dept.description }}
+
+                        {% else %}
+
+                            No description available.
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                <!-- DEPARTMENT DETAILS -->
+
+                <div class="department-details">
+
+
+                    <!-- HEAD -->
+
+                    <div>
+
+                        <span>
+                            Head
+                        </span>
+
+                        <strong>
+
+                            {% if dept.dept_head %}
+
+                                {{ dept.dept_head }}
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- MEMBERS -->
+
+                    <div>
+
+                        <span>
+                            Members
+                        </span>
+
+                        <strong>
+                            {{ dept.total_employees }} Members
+                        </strong>
+
+                    </div>
+
+
+                    <!-- CREATED DATE -->
+
+                    <div>
+
+                        <span>
+                            Created Date
+                        </span>
+
+                        <strong>
+
+                            {% if dept.created_date %}
+
+                                {{ dept.created_date.strftime('%d %b %Y') }}
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- VIEW TEAM -->
+
+                <div class="team-link">
+
+                    <button
+                        type="button"
+                        class="view-team-btn"
+                        data-dept-id="{{ dept.dept_id }}"
+                    >
+                        View Team →
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+            {% else %}
+
+            <div class="no-departments">
+
+                No departments found.
+
+            </div>
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- ADD DEPARTMENT MODAL -->
+    <!-- ================================================= -->
+
+    <div
+        id="addDepartmentModal"
+        class="add-department-modal"
+    >
+
+        <div class="add-department-content">
+
+
+            <div class="add-department-header">
+
+                <div>
+
+                    <h3>
+                        Add Department
+                    </h3>
+
+                    <p>
+                        Create a new department
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    onclick="closeAddDepartment()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                action="/add-department"
+                method="POST"
+            >
+
+
+                <!-- NAME -->
+
+                <div class="department-form-group">
+
+                    <label>
+                        Department Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="dept_name"
+                        placeholder="Enter department name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- HEAD -->
+
+                <div class="department-form-group">
+
+                    <label>
+                        Department Head
+                    </label>
+
+                    <input
+                        type="text"
+                        name="dept_head"
+                        placeholder="Enter department head name"
+                    >
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="department-form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        placeholder="Enter department description"
+                        rows="3"
+                    ></textarea>
+
+                </div>
+
+                <div class="department-form-group">
+    <label>Created Date</label>
+
+    <input
+        type="date"
+        name="created_date"
+        id="createdDate"
+        required
+    >
+</div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="department-form-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-department-btn"
+                        onclick="closeAddDepartment()"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="save-department-btn"
+                    >
+                        Add Department
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- EDIT DEPARTMENT MODAL -->
+    <!-- ================================================= -->
+
+    <div
+        id="editDepartmentModal"
+        class="add-department-modal"
+    >
+
+        <div class="add-department-content">
+
+
+            <div class="add-department-header">
+
+                <div>
+
+                    <h3>
+                        Edit Department
+                    </h3>
+
+                    <p>
+                        Update department details
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    onclick="closeEditDepartment()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form
+                id="editDepartmentForm"
+                method="POST"
+            >
+
+
+                <!-- NAME -->
+
+                <div class="department-form-group">
+
+                    <label>
+                        Department Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editDeptName"
+                        name="dept_name"
+                        placeholder="Enter department name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- HEAD -->
+
+                <div class="department-form-group">
+
+                    <label>
+                        Department Head
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editDeptHead"
+                        name="dept_head"
+                        placeholder="Enter department head name"
+                    >
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="department-form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        id="editDeptDescription"
+                        name="description"
+                        placeholder="Enter department description"
+                        rows="3"
+                    ></textarea>
+
+                </div>
+
+
+                <!-- CREATED DATE -->
+<div class="department-form-group">
+    <label>Created Date</label>
+
+    <input
+        type="date"
+        name="created_date"
+        id="editDeptCreatedDate"
+        required
+    >
+</div>
+
+
+                <!-- BUTTONS -->
+
+                <div class="department-form-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-department-btn"
+                        onclick="closeEditDepartment()"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="save-department-btn"
+                    >
+                        Save Changes
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- TEAM MODAL -->
+    <!-- ================================================= -->
+
+    <div
+        id="teamModal"
+        class="team-modal"
+    >
+
+        <div class="team-modal-content">
+
+
+            <div class="team-modal-header">
+
+                <div>
+
+                    <h3 id="teamDepartmentName">
+                        Team
+                    </h3>
+
+                    <p>
+                        Select an employee to view profile
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="closeTeamModal"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                id="teamMembers"
+                class="team-members"
+            ></div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- EMPLOYEE PROFILE MODAL -->
+    <!-- ================================================= -->
+
+    <div
+        id="profileModal"
+        class="profile-modal"
+    >
+
+        <div class="profile-modal-content">
+
+
+            <div class="profile-header">
+
+                <h3>
+                    Employee Profile
+                </h3>
+
+
+                <button
+                    type="button"
+                    id="closeProfileModal"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div id="employeeProfile"></div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script
+    src="{{ url_for('static', filename='js/department.js') }}"
+></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,663 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #eef2ff;
+    color: #172033;
+}
+
+.page {
+    min-height: 100vh;
+    padding: 28px 35px;
+}
+
+
+/* ================= TOPBAR ================= */
+
+.topbar {
+    background: #2539f4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 40px;
+    margin: -28px -35px 30px -35px;
+}
+
+.title-area h1 {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.title-area p {
+    color: rgba(255,255,255,0.85);
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.back-btn {
+    text-decoration: none;
+    background: white;
+    color: #2539f4;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.back-btn:hover {
+    background: #f8fafc;
+}
+
+
+/* ================= HEADING ================= */
+
+.department-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.department-heading h2 {
+    font-size: 28px;
+    color: #172033;
+    margin-bottom: 7px;
+}
+
+.department-heading p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* ================= ADD BUTTON ================= */
+
+.add-department-btn {
+    background: #5146e5;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-department-btn:hover {
+    background: #4338ca;
+}
+
+
+/* ================= DEPARTMENT GRID ================= */
+
+
+.department-section{
+    width:100%;
+    margin-top:25px;
+    padding:30px;
+    background:#dfe6f5;
+    border-radius:24px;
+}
+
+.department-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+    gap:25px;
+    width:100%;
+}
+
+/* ================= DEPARTMENT CARD ================= */
+
+.department-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    border: 1px solid #edf0f5;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.department-card:hover {
+    box-shadow: 0 12px 30px rgba(0,0,0,0.09);
+    transform: translateY(-2px);
+}
+
+
+/* ================= EMPTY STATE ================= */
+
+.no-departments {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+    font-size: 15px;
+    background: white;
+    border-radius: 18px;
+    border: 1px dashed #dbe1ec;
+}
+
+
+/* ================= CARD TOP ================= */
+
+.department-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.department-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: #eef2ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.card-actions button {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.card-actions button:hover {
+    background: #eef2ff;
+    color: #2539f4;
+}
+
+.delete-department-btn:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+
+
+/* ================= DEPARTMENT INFO ================= */
+
+.department-info h3 {
+    font-size: 16px;
+    color: #172033;
+    margin-bottom: 5px;
+}
+
+.department-description {
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.4;
+    min-height: 16px;
+}
+
+
+/* ================= DETAILS ================= */
+
+.department-details {
+    display: flex;
+    gap: 34px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #eef2f7;
+}
+
+.department-details div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.department-details span {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.department-details strong {
+    color: #334155;
+    font-size: 13px;
+}
+
+
+/* ================= VIEW TEAM ================= */
+
+.team-link {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+.team-link a {
+    text-decoration: none;
+    color: #5146e5;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.team-link a:hover {
+    color: #4338ca;
+}
+
+
+/* ================= TEAM CARD / TABLE ================= */
+
+.team-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f8fafc;
+}
+
+th {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #6b7280;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+td {
+    padding: 17px 20px;
+    font-size: 14px;
+    color: #374151;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: #fafafa;
+}
+
+.employee-link {
+    color: #2539f4;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.employee-link:hover {
+    text-decoration: underline;
+}
+
+
+/* ================= MODALS (team / profile / add department) ================= */
+
+.team-modal,
+.profile-modal,
+.add-department-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.35);
+    align-items: center;
+    justify-content: center;
+}
+
+.team-modal {
+    z-index: 1000;
+}
+
+.profile-modal {
+    z-index: 1100;
+}
+
+.add-department-modal {
+    z-index: 1200;
+}
+
+.team-modal.active,
+.profile-modal.active,
+.add-department-modal.active {
+    display: flex;
+}
+
+.team-modal-content {
+    width: 450px;
+    max-width: 90%;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+}
+
+.team-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.team-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.team-modal-header p {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* shared close-button style, used by all three modal headers */
+.team-modal-header button,
+.profile-header button,
+.add-department-header button {
+    border: none;
+    background: #f1f5f9;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.team-members {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.team-member {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.team-member:hover {
+    background: #f8fafc;
+    border-color: #c7d2fe;
+}
+
+.member-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef2ff;
+    border-radius: 10px;
+}
+
+.team-member strong {
+    display: block;
+    color: #111827;
+    font-size: 14px;
+}
+
+.team-member small {
+    display: block;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+.view-team-btn {
+    border: none;
+    background: none;
+    color: #5146e5;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.no-members {
+    text-align: center;
+    padding: 25px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+
+/* ================= PROFILE MODAL ================= */
+
+.profile-modal-content {
+    width: 500px;
+    max-width: 90%;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 15px;
+}
+
+.profile-header h3 {
+    margin: 0;
+}
+
+.profile-avatar {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: #eef2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 20px auto 12px;
+}
+
+#employeeProfile h2 {
+    text-align: center;
+    margin: 0;
+}
+
+.profile-role {
+    text-align: center;
+    color: #64748b;
+    margin: 5px 0 20px;
+}
+
+.profile-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.profile-details div {
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 9px;
+}
+
+.profile-details span {
+    display: block;
+    color: #64748b;
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.profile-details strong {
+    font-size: 13px;
+    color: #111827;
+    word-break: break-word;
+}
+
+
+/* ================= ADD DEPARTMENT MODAL ================= */
+
+.add-department-content {
+    width: 460px;
+    max-width: 90%;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+}
+
+.add-department-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.add-department-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #111827;
+}
+
+.add-department-header p {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.department-form-group {
+    margin-bottom: 17px;
+}
+
+.department-form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.department-form-group input,
+.department-form-group textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #dbe1ec;
+    border-radius: 9px;
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+    outline: none;
+}
+
+.department-form-group input:focus,
+.department-form-group textarea:focus {
+    border-color: #5146e5;
+}
+
+.department-form-group textarea {
+    resize: vertical;
+}
+
+.department-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.cancel-department-btn {
+    border: 1px solid #e2e8f0;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 10px 17px;
+    border-radius: 9px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.cancel-department-btn:hover {
+    background: #e2e8f0;
+}
+
+.save-department-btn {
+    border: none;
+    background: #5146e5;
+    color: #ffffff;
+    padding: 10px 17px;
+    border-radius: 9px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.save-department-btn:hover {
+    background: #4338ca;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+    .department-grid {
+        grid-template-columns: repeat(2, minmax(260px, 1fr));
+    }
+
+}
+
+@media (max-width: 800px) {
+
+    .department-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .department-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .page {
+        padding: 20px;
+    }
+
+    .topbar {
+        margin: -20px -20px 25px -20px;
+        padding: 20px;
+    }
+
+    .department-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

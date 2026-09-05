@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+</head>
+<body>
+
+    <div class="topbar">
+        <h2>Employee Management System</h2>
+        <a href="/employees" class="logout-btn">Back</a>
+    </div>
+
+    <div class="register-wrapper">
+        <div class="register-card">
+
+            <div class="register-title" style="margin-bottom:25px;">
+                <h2>Edit Employee</h2>
+                <p>Update employee details and save the changes.</p>
+            </div>
+
+            <form action="/update-employee/{{ emp['id'] }}" method="POST">
+
+                <div class="form-grid">
+
+                    <div>
+                        <label>First Name</label>
+                        <input type="text" name="first_name"
+                               value="{{ emp['first_name'] }}" required>
+                    </div>
+
+                    <div>
+                        <label>Last Name</label>
+                        <input type="text" name="last_name"
+                               value="{{ emp['last_name'] }}" required>
+                    </div>
+
+                    <div>
+                        <label>Email Address</label>
+                        <input type="email" name="email"
+                               value="{{ emp['email'] }}" required>
+                    </div>
+
+                    <div>
+                        <label>Phone Number</label>
+                        <input type="text" name="phone"
+                               value="{{ emp['phone'] }}" required>
+                    </div>
+
+                <div>
+    <label>Department</label>
+
+    <select name="dept_id" required>
+
+        {% for dept in departments %}
+
+            <option value="{{ dept['dept_id'] }}"
+                {% if dept['dept_id'] == emp['dept_id'] %}
+                    selected
+                {% endif %}>
+                {{ dept['dept_name'] }}
+            </option>
+
+        {% endfor %}
+
+    </select>
+</div>
+
+                    <div>
+                        <label>Role</label>
+                        <input type="text" name="role"
+                               value="{{ emp['role'] }}" required>
+                    </div>
+
+                    <div>
+                        <label>Joining Date</label>
+                        <input type="date" name="join_date"
+                               value="{{ emp['join_date'] }}" required>
+                    </div>
+
+                    <div>
+                        <label>Birth Date</label>
+                        <input type="date" name="birth_date"
+                               value="{{ emp['birth_date'] }}" required>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <a href="/employees" class="secondary-btn">Cancel</a>
+
+                    <button type="submit" class="primary-btn">
+                        Update Employee
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>

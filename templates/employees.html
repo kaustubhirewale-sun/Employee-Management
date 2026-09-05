@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Employee List</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='employee.css') }}">
+</head>
+
+<body>
+
+<div class="navbar">
+    <a href="/dashboard" class="back-btn">← Back</a>
+</div>
+
+
+<div class="dashboard-container">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+
+        <h2>Employee List</h2>
+
+        <a href="/register" class="add-btn">
+            + Add Employee
+        </a>
+
+    </div>
+
+
+    <!-- TABLE CARD -->
+    <div class="table-box">
+
+        <!-- SEARCH AREA -->
+        <div class="search-area">
+
+            <div class="search-box">
+
+                <span class="search-icon">⌕</span>
+
+                <input
+                    type="text"
+                    id="employeeSearch"
+                    placeholder="Search by name, ID, department..."
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    id="searchButton"
+                    class="search-btn">
+                    Search
+                </button>
+
+            </div>
+
+            <div id="searchMessage" class="search-message"></div>
+
+        </div>
+
+
+        <!-- EMPLOYEE TABLE -->
+        <table class="employee-table">
+
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Role</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Joining Date</th>
+                    <th>Birth Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+
+            <tbody id="employeeTableBody">
+
+            {% for emp in employees %}
+
+                <tr>
+
+                    <td>
+                        {{ emp.employee_code }}
+                    </td>
+
+                    <td>
+                        <span class="emp-name">
+                            {{ emp.first_name }} {{ emp.last_name }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ emp.department }}
+                    </td>
+
+                    <td>
+                        {{ emp.role }}
+                    </td>
+
+                    <td>
+                        {{ emp.email }}
+                    </td>
+
+                    <td>
+                        {{ emp.phone }}
+                    </td>
+
+                    <td>
+                        {{ emp.join_date }}
+                    </td>
+
+                    <td>
+                        {{ emp.birth_date }}
+                    </td>
+
+                    <td>
+                        <div class="action-buttons">
+
+                            <a
+                                href="/edit-employee/{{ emp.id }}"
+                                class="edit-btn">
+                                Edit
+                            </a>
+
+                            <a
+                                href="/delete-employee/{{ emp.id }}"
+                                class="delete-btn"
+                                onclick="return confirm('Delete this employee?')">
+                                Delete
+                            </a>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- ONLY LINK THE EXTERNAL JS FILE -->
+<script src="{{ url_for('static', filename='js/employee.js') }}"></script>
+
+</body>
+</html>

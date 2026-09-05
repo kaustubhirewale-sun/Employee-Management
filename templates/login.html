@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+   <title>Employee Management System</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='login.css') }}">
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h2>Employee Management System</h2>
+<div class="role-tabs">
+
+    <button
+        type="button"
+        id="admin-tab"
+        class="active"
+    >
+        Admin
+    </button>
+
+    <button
+        type="button"
+        id="employee-tab"
+    >
+        Employee
+    </button>
+
+</div>
+
+
+
+    {% if error %}
+        <div class="login-error">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <form action="/login" method="POST">
+            <input type="hidden" name="role" id="selected-role" value="admin">
+
+        <label>Username</label>
+
+        <input
+            type="text"
+            name="username"
+            required
+        >
+
+<label>Password</label>
+
+<div class="password-field">
+    <input
+        type="password"
+        name="password"
+        id="login-password"
+        placeholder="Enter your password"
+        required
+    >
+
+    <span
+        class="eye-button"
+        onclick="togglePassword('login-password', this)"
+        aria-label="Show password"
+    >👁</span>
+</div>
+
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+
+
+ <p style="text-align:center; margin-top:15px;">
+    New user?
+   <a href="/signup?role=admin" id="signup-link">Create Account</a>
+</p>
+
+</div>
+<script>
+function togglePassword(inputId, button) {
+    const input = document.getElementById(inputId);
+
+    if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "🙈";
+        button.setAttribute("aria-label", "Hide password");
+    } else {
+        input.type = "password";
+        button.textContent = "👁";
+        button.setAttribute("aria-label", "Show password");
+    }
+}
+</script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

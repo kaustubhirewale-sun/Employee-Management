@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance Management</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='attendance.css') }}">
+
+</head>
+
+
+<body>
+
+
+<div class="page">
+
+
+    <!-- ================= TOPBAR ================= -->
+
+    <header class="topbar">
+
+    <div class="title-area">
+        <h1>Attendance Management</h1>
+        <p>Dashboard / Attendance</p>
+    </div>
+
+    <a href="/dashboard" class="back-btn">
+        ← Back
+    </a>
+
+</header>
+
+
+
+    <!-- ================= ATTENDANCE STATS ================= -->
+
+    <section class="stats-grid">
+
+
+        <!-- Present -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon present-icon">
+                    ✓
+                </span>
+
+            </div>
+
+            <h2>
+                {{ present_count }}
+            </h2>
+
+            <p>
+                Present Today
+            </p>
+
+        </div>
+
+
+
+        <!-- Absent -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon absent-icon">
+                    ✕
+                </span>
+
+            </div>
+
+            <h2>
+                {{ absent_count }}
+            </h2>
+
+            <p>
+                Absent Today
+            </p>
+
+        </div>
+
+
+
+        <!-- Leave -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon leave-icon">
+                    📅
+                </span>
+
+            </div>
+
+            <h2>
+                {{ leave_count }}
+            </h2>
+
+            <p>
+                On Leave
+            </p>
+
+        </div>
+
+
+
+        <!-- Attendance Rate -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-icon rate-icon">
+                    %
+                </span>
+
+            </div>
+
+            <h2>
+                {{ attendance_rate }}%
+            </h2>
+
+            <p>
+                Attendance Rate
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= FILTERS ================= -->
+
+    <section class="filter-box">
+
+        <form action="/attendance" method="GET">
+
+            <div class="filter-row">
+
+
+                <!-- Date -->
+
+                <input
+                    type="date"
+                    name="filter_date"
+                    value="{{ selected_date }}"
+                >
+
+
+
+                <!-- Department -->
+
+                <select name="department">
+
+                    <option value="">
+                        All Departments
+                    </option>
+
+
+                    {% for department in departments %}
+
+                        <option
+                            value="{{ department }}"
+                            {% if selected_department == department %}
+                            selected
+                            {% endif %}
+                        >
+
+                            {{ department }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+
+                <!-- Status -->
+
+                <select name="status_filter">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+
+                    <option
+                        value="Present"
+                        {% if selected_status == 'Present' %}
+                        selected
+                        {% endif %}
+                    >
+                        Present
+                    </option>
+
+
+                    <option
+                        value="Absent"
+                        {% if selected_status == 'Absent' %}
+                        selected
+                        {% endif %}
+                    >
+                        Absent
+                    </option>
+
+
+                    <option
+                        value="Leave"
+                        {% if selected_status == 'Leave' %}
+                        selected
+                        {% endif %}
+                    >
+                        Leave
+                    </option>
+
+
+                    <option
+                        value="Late"
+                        {% if selected_status == 'Late' %}
+                        selected
+                        {% endif %}
+                    >
+                        Late
+                    </option>
+
+                </select>
+
+
+
+                <!-- Apply Filter -->
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Apply Filter
+                </button>
+
+
+
+                <!-- Export -->
+
+               <a href="/export-attendance?filter_date={{ selected_date }}"
+   class="export-btn">
+    Export CSV
+</a>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <section class="content-grid">
+
+
+
+        <!-- ================= ATTENDANCE TABLE ================= -->
+
+        <div class="card attendance-card">
+
+
+            <div class="card-header">
+
+                <div>
+
+                  <h3>
+    {% if selected_date == current_date %}
+        Today's Attendance
+    {% else %}
+        Attendance
+    {% endif %}
+</h3>
+
+                    <p>
+                        {{ selected_date }}
+                    </p>
+
+                </div>
+
+
+                <span class="record-count">
+
+                    {{ attendance|length }} Records
+
+                </span>
+
+            </div>
+
+
+
+            <div class="table-wrapper">
+
+            <table>
+        <thead>
+    <tr>
+        <th>Employee ID</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Check-in</th>
+        <th>Check-out</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+</thead>
+                    <tbody>
+                          {% for record in attendance %}
+
+                       <tr>
+
+    <!-- Employee ID -->
+    <td>
+        {{ record.employee_code }}
+    </td>
+
+    <!-- Name -->
+    <td>
+        <div class="employee-name">
+            {{ record.first_name }}
+            {{ record.last_name }}
+        </div>
+    </td>
+
+    <!-- Department -->
+    <td>
+        {{ record.department }}
+    </td>
+
+    <!-- Check-in -->
+   <td id="check-in-{{ record.id }}" class="attendance-time-cell">
+    {% if record.status == 'Present' or record.status == 'Late' %}
+
+        {% if record.check_in %}
+            <span class="time-value">{{ record.check_in }}</span>
+        {% else %}
+            <form action="/check-in/{{ record.id }}" method="POST" class="check-form">
+                <button type="submit" class="check-btn">
+                    Check In
+                </button>
+            </form>
+        {% endif %}
+
+    {% else %}
+        <span class="no-check">—</span>
+    {% endif %}
+</td>
+
+    <!-- Check-out -->
+    <td id="check-out-{{ record.id }}" class="attendance-time-cell">
+    {% if record.status == 'Present' or record.status == 'Late' %}
+
+        {% if record.check_out %}
+            <span class="time-value">{{ record.check_out }}</span>
+
+        {% elif record.check_in %}
+            <form action="/check-out/{{ record.id }}" method="POST" class="check-form">
+                <button type="submit" class="check-btn">
+                    Check Out
+                </button>
+            </form>
+
+        {% else %}
+            <span class="no-check">—</span>
+        {% endif %}
+
+    {% else %}
+        <span class="no-check">—</span>
+    {% endif %}
+</td>
+
+    <!-- Status -->
+    <td>
+        <span id="status-display-{{ record.id }}">
+
+            {% if record.status == 'Present' %}
+                <span class="status status-present">Present</span>
+
+            {% elif record.status == 'Absent' %}
+                <span class="status status-absent">Absent</span>
+
+            {% elif record.status == 'Leave' %}
+                <span class="status status-leave">Leave</span>
+
+            {% elif record.status == 'Late' %}
+                <span class="status status-late">Late</span>
+            {% endif %}
+
+        </span>
+
+        <select
+            id="status-edit-{{ record.id }}"
+            class="status-edit"
+            style="display:none;"
+        >
+            <option value="Present"
+                {% if record.status == 'Present' %}selected{% endif %}>
+                Present
+            </option>
+
+            <option value="Absent"
+                {% if record.status == 'Absent' %}selected{% endif %}>
+                Absent
+            </option>
+
+            <option value="Leave"
+                {% if record.status == 'Leave' %}selected{% endif %}>
+                Leave
+            </option>
+
+            <option value="Late"
+                {% if record.status == 'Late' %}selected{% endif %}>
+                Late
+            </option>
+        </select>
+    </td>
+
+    <!-- Action -->
+    <td>
+        <button
+            type="button"
+            class="edit-status-btn"
+            data-id="{{ record.id }}"
+            title="Edit Status"
+        >
+            ✎
+        </button>
+    </td>
+
+</tr>
+                    {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= QUICK MARK ================= -->
+
+        <div class="card quick-card">
+
+
+            <div class="quick-header">
+
+                <h3>
+                    Quick Mark
+                </h3>
+
+                <p>
+                    Instant attendance entry
+                </p>
+
+            </div>
+
+
+
+            <form
+         
+    action="/save-attendance"
+    method="POST"
+    class="quick-form"
+    onsubmit="return validateEmployee()"
+>
+
+
+
+                <!-- Date -->
+
+              <div class="form-group">
+
+    <label>
+        Date
+    </label>
+
+    <input
+        type="date"
+        name="attendance_date"
+        value="{{ current_date }}"
+        max="{{ current_date }}"
+        required
+    >
+
+</div>
+                <!-- Employee Search -->
+
+               
+
+<div class="form-group">
+
+    <label>
+        Search Employee
+    </label>
+
+    <input
+        type="text"
+        id="employeeSearch"
+        placeholder="Type employee name..."
+        autocomplete="off"
+        required
+    >
+
+    <input
+        type="hidden"
+        name="employee_id"
+        id="employeeId"
+    >
+
+    <div id="searchResults" class="search-results">
+
+        {% for emp in employees %}
+
+        <div
+            class="employee-option"
+            data-id="{{ emp.id }}"
+            data-name="{{ emp.first_name }} {{ emp.last_name }}"
+        >
+
+            {{ emp.employee_code }}
+            -
+            {{ emp.first_name }}
+            {{ emp.last_name }}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+
+    
+
+
+
+
+                <!-- Status -->
+
+                <div class="form-group">
+
+                    <label>
+                        Status
+                    </label>
+
+
+                    <div class="status-buttons">
+
+
+                        <label>
+
+                            <input
+                                type="radio"
+                                name="status"
+                                value="Present"
+                                checked
+                            >
+
+                            Present
+
+                        </label>
+
+
+
+                        <label>
+
+                            <input
+                                type="radio"
+                                name="status"
+                                value="Absent"
+                            >
+
+                            Absent
+
+                        </label>
+
+
+
+                        <label>
+
+                            <input
+                                type="radio"
+                                name="status"
+                                value="Leave"
+                            >
+
+                            Leave
+
+                        </label>
+
+
+
+                        <label>
+
+                            <input
+                                type="radio"
+                                name="status"
+                                value="Late"
+                            >
+
+                            Late
+
+                        </label>
+
+
+                    </div>
+
+                </div>
+  <!-- Save -->
+
+                <button
+                    type="submit"
+                    class="save-btn">
+        
+                    Save Attendance
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+    </section>
+
+</div>
+
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script src="{{ url_for('static', filename='js/attendance.js') }}"></script>
+
+
+</body>
+
+</html>

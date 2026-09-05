@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Attendance</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='employee_attendance.css') }}">
+
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-header">
+
+        <div class="sidebar-logo">
+            👥
+        </div>
+
+        <div class="sidebar-title">
+            Employee Portal
+        </div>
+
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+        <a href="/employee-dashboard">
+            🏠 Dashboard
+        </a>
+
+        <a href="/employee-attendance" class="active">
+            📅 My Attendance
+        </a>
+
+        <a href="/employee-salary">
+            💰 My Salary
+        </a>
+
+        <a href="/request-leave">
+            📝 Leave Request
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- ================= MAIN AREA ================= -->
+
+<div class="main-content">
+
+
+    <!-- ================= TOPBAR ================= -->
+
+    <header class="topbar">
+
+        <div>
+
+            <h1>My Attendance</h1>
+
+            <p>
+                View and track your attendance records
+            </p>
+
+        </div>
+
+
+
+        <a href="/employee-dashboard"
+           class="back-btn">
+
+            ← Back 
+
+        </a>
+
+    </header>
+
+
+    <!-- ================= CONTENT ================= -->
+
+    <main class="dashboard-container">
+
+
+        <!-- ================= WELCOME ================= -->
+
+        <section class="welcome-card">
+
+            <div>
+
+                <h2>
+                    📅 Attendance Overview
+                </h2>
+
+                <p>
+                    {{ employee.first_name }}
+                    {{ employee.last_name }}
+                    ·
+                    {{ employee.employee_code }}
+                </p>
+
+            </div>
+
+        </section>
+
+
+        
+
+
+        <!-- ================= FILTER ================= -->
+
+        <section class="filter-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Attendance Filter</h2>
+
+                    <p>Select a month to view your attendance</p>
+
+                </div>
+
+            </div>
+
+
+            <form method="GET"
+                  class="filter-form"
+                  id="attendanceFilter">
+
+                <div class="input-group">
+
+                    <label for="month">
+                        Select Month
+                    </label>
+
+                    <input
+                        type="month"
+                        id="month"
+                        name="month"
+                        value="{{ selected_month }}"
+                    >
+
+                </div>
+
+
+                <button type="submit"
+                        class="filter-btn">
+
+                    View Attendance
+
+                </button>
+
+
+                <button type="button"
+                        class="clear-btn"
+                        id="clearFilter">
+
+                    Clear
+
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- ================= SUMMARY ================= -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Attendance Summary</h2>
+
+                    <p>
+                        Your attendance for the selected month
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon present-icon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <span>Present Days</span>
+
+                        <strong>
+                            {{ present_count }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon absent-icon">
+                        ×
+                    </div>
+
+                    <div>
+
+                        <span>Absent Days</span>
+
+                        <strong>
+                            {{ absent_count }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon leave-icon">
+                        !
+                    </div>
+
+                    <div>
+
+                        <span>Leave Days</span>
+
+                        <strong>
+                            {{ leave_count }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon rate-icon">
+                        %
+                    </div>
+
+                    <div>
+
+                        <span>Attendance Rate</span>
+
+                        <strong>
+                            {{ attendance_rate }}%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ATTENDANCE TABLE ================= -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Attendance Records</h2>
+
+                    <p>
+                        Detailed attendance history
+                    </p>
+
+                </div>
+
+                <span class="record-count">
+                    {{ attendance_records|length }} Records
+                </span>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Date</th>
+
+                            <th>Status</th>
+
+                            <th>Check-in</th>
+
+                            <th>Check-out</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for record in attendance_records %}
+
+                        <tr>
+
+                            <td>
+                                {{ record.attendance_date }}
+                            </td>
+
+
+                            <td>
+
+                                {% if record.status == 'Present' %}
+
+                                    <span class="status present">
+                                        Present
+                                    </span>
+
+                                {% elif record.status == 'Absent' %}
+
+                                    <span class="status absent">
+                                        Absent
+                                    </span>
+
+                                {% elif record.status == 'Leave' %}
+
+                                    <span class="status leave">
+                                        Leave
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status">
+                                        {{ record.status }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+                                {{ record.check_in or '--' }}
+                            </td>
+
+
+                            <td>
+                                {{ record.check_out or '--' }}
+                            </td>
+
+                        </tr>
+
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="4"
+                                class="empty-state">
+
+                                <div class="empty-icon">
+                                    📋
+                                </div>
+
+                                <strong>
+                                    No attendance records
+                                </strong>
+
+                                <p>
+                                    No attendance records were found
+                                    for this month.
+                                </p>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+      
+
+
+    </main>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/employee_attendance.js') }}"></script>
+
+</body>
+
+</html>

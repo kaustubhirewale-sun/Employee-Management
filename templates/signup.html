@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="signup-header">
+        <div class="signup-icon">+</div>
+        <h2>Create Account</h2>
+        <p>Register a new account to continue</p>
+    </div>
+
+    {% if error %}
+    <div class="login-error">
+        {{ error }}
+    </div>
+{% endif %}
+
+<form action="/register-user" method="POST">
+
+<input type="hidden" name="role" id="selected-role" value="{{ role }}">
+
+{% if request.args.get('role') == 'employee' %}
+
+    <label>Employee Code</label>
+
+    <input
+        type="text"
+        name="employee_code"
+        placeholder="Enter your Employee Code"
+        required
+    >
+
+    {% endif %}
+
+
+    <label>Username</label>
+
+    <input
+        type="text"
+        name="username"
+        placeholder="Enter your username"
+        required
+    >
+
+
+    <label>New Password</label>
+
+    <div class="password-field">
+
+        <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter your password"
+            required
+        >
+
+        <span
+            class="eye-button"
+            onclick="togglePassword('password', this)"
+        >👁</span>
+
+    </div>
+
+
+    <div id="password-message" class="password-message">
+
+        Password must contain:
+        <span>8+ characters</span>,
+        <span>1 uppercase</span>,
+        <span>1 lowercase</span>,
+        <span>1 number</span>,
+        <span>1 special character</span>.
+
+    </div>
+
+
+    <label>Confirm Password</label>
+
+    <div class="password-field">
+
+        <input
+            type="password"
+            name="confirm_password"
+            id="confirm_password"
+            placeholder="Confirm your password"
+            required
+        >
+
+        <span
+            class="eye-button"
+            onclick="togglePassword('confirm_password', this)"
+        >👁</span>
+
+    </div>
+
+
+    <button type="submit">
+        Create Account
+    </button>
+
+
+    </form>
+
+    <div class="auth-link">
+        Already have an account?
+        <a href="/">Login</a>
+    </div>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

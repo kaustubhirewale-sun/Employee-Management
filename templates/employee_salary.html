@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Employee Salary</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='employee_salary.css') }}">
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-header">
+
+        <div class="sidebar-logo">
+            👥
+        </div>
+
+        <div class="sidebar-title">
+            Employee Portal
+        </div>
+
+    </div>
+
+
+    <nav class="sidebar-menu">
+
+        <a href="/employee-dashboard">
+            🏠 Dashboard
+        </a>
+
+        <a href="/employee-attendance">
+            📅 Attendance
+        </a>
+
+        <a href="/employee-salary"
+           class="active">
+            💰 Salary
+        </a>
+
+        <a href="/employee-leave">
+            📅 Leave Management
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+
+<header class="topbar">
+
+    <div>
+
+        <h1>Salary</h1>
+
+        <p>
+            Welcome back,
+            <strong>
+                {{ employee.first_name }}
+                {{ employee.last_name }}
+            </strong>
+        </p>
+
+    </div>
+
+
+    <a href="/" class="logout-btn">
+        Logout
+    </a>
+
+</header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="dashboard-container">
+
+
+    <!-- =================================================
+         CURRENT SALARY
+    ================================================= -->
+
+    <section class="salary-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Salary Overview</h2>
+
+                <p>
+                    Your latest salary information
+                </p>
+
+            </div>
+
+
+    <div class="month-box">
+    📅
+    <input type="month"
+           value="{{ selected_month }}"
+           onchange="window.location.href='/employee-salary?month=' + this.value">
+</div>
+
+        </div>
+
+
+        {% if latest_salary %}
+
+        <!-- Salary Cards -->
+
+        <div class="salary-cards">
+
+
+            <!-- Basic Salary -->
+
+            <div class="salary-card">
+
+                <div class="salary-icon basic-icon">
+                    ₹
+                </div>
+
+                <div>
+
+                    <span>
+                        Basic Salary
+                    </span>
+
+                    <strong>
+                        ₹{{ "%.2f"|format(latest_salary.basic_salary or 0) }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Allowance -->
+
+            <div class="salary-card">
+
+                <div class="salary-icon allowance-icon">
+                    +
+                </div>
+
+                <div>
+
+                    <span>
+                        Allowance
+                    </span>
+
+                    <strong>
+                        ₹{{ "%.2f"|format(latest_salary.allowance or 0) }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Deduction -->
+
+            <div class="salary-card">
+
+                <div class="salary-icon deduction-icon">
+                    -
+                </div>
+
+                <div>
+
+                    <span>
+                        Deduction
+                    </span>
+
+                    <strong>
+                        ₹{{ "%.2f"|format(latest_salary.deduction or 0) }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Net Salary -->
+
+            <div class="salary-card net-card">
+
+                <div class="salary-icon net-icon">
+                    ₹
+                </div>
+
+                <div>
+
+                    <span>
+                        Net Salary
+                    </span>
+
+                    <strong>
+                        ₹{{ "%.2f"|format(latest_salary.net_salary or 0) }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PAYMENT INFORMATION
+        ================================================= -->
+
+        <div class="payment-box">
+
+            <div>
+
+                <span>
+                    Payment Status
+                </span>
+
+
+                {% if latest_salary.payment_status == 'Paid' %}
+
+                    <span class="status paid">
+                        Paid
+                    </span>
+
+                {% elif latest_salary.payment_status == 'Initiated' %}
+
+                    <span class="status initiated">
+                        Initiated
+                    </span>
+
+                {% else %}
+
+                    <span class="status pending">
+                        Pending
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Payment Date
+                </span>
+
+                <strong>
+
+                    {% if latest_salary.payment_date %}
+
+                        {{ latest_salary.payment_date.strftime('%d %b %Y') }}
+
+                    {% else %}
+
+                        --
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        {% else %}
+
+        <!-- No Salary -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                💰
+            </div>
+
+            <h3>
+                No Salary Records
+            </h3>
+
+            <p>
+                Your salary information has not been added yet.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =================================================
+         SALARY HISTORY
+    ================================================= -->
+
+    <section class="salary-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>Salary History</h2>
+
+                <p>
+                    Your previous salary records
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% if salary_records %}
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Month</th>
+
+                        <th>Basic Salary</th>
+
+                        <th>Allowance</th>
+
+                        <th>Deduction</th>
+
+                        <th>Net Salary</th>
+
+                        <th>Status</th>
+
+                        <th>Payment Date</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for salary in salary_records %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ salary.salary_month.strftime('%B %Y') }}
+
+                        </td>
+
+
+                        <td>
+
+                            ₹{{ "%.2f"|format(salary.basic_salary or 0) }}
+
+                        </td>
+
+
+                        <td>
+
+                            ₹{{ "%.2f"|format(salary.allowance or 0) }}
+
+                        </td>
+
+
+                        <td>
+
+                            ₹{{ "%.2f"|format(salary.deduction or 0) }}
+
+                        </td>
+
+
+                        <td class="net-value">
+
+                            ₹{{ "%.2f"|format(salary.net_salary or 0) }}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if salary.payment_status == 'Paid' %}
+
+                                <span class="status paid">
+                                    Paid
+                                </span>
+
+                            {% elif salary.payment_status == 'Initiated' %}
+
+                                <span class="status initiated">
+                                    Initiated
+                                </span>
+
+                            {% else %}
+
+                                <span class="status pending">
+                                    Pending
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if salary.payment_date %}
+
+                                {{ salary.payment_date.strftime('%d %b %Y') }}
+
+                            {% else %}
+
+                                --
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <p>
+                No salary history available.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+</main>
+
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Employee</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+</head>
+<body>
+
+    <div class="topbar">
+        <h2>Employee Management System</h2>
+        <a href="/dashboard" class="logout-btn">Back</a>
+    </div>
+
+    <div class="layout">
+
+        <div class="content">
+
+            <div class="breadcrumb">Dashboard / Employees / Add Employee</div>
+
+            <div class="form-card">
+
+                <h1>Register New Employee</h1>
+                <p style="color:#666;">
+                    Fill employee details. Employee ID will be generated automatically.
+                </p>
+
+                <div class="section-title">Employee Information</div>
+
+                <form action="/save-employee" method="POST">
+
+                    <div class="form-grid">
+
+                        <div>
+                            <label>First Name</label>
+                            <input type="text" name="first_name"
+                                   placeholder="Enter first name" required>
+                        </div>
+
+                        <div>
+                            <label>Last Name</label>
+                            <input type="text" name="last_name"
+                                   placeholder="Enter last name" required>
+                        </div>
+
+                        <div>
+                            <label>Email Address</label>
+                            <input type="email" name="email"
+                                   placeholder="Enter email address" required>
+                        </div>
+
+                        <div>
+                            <label>Phone Number</label>
+                            <input type="text" name="phone"
+                                   placeholder="Enter phone number" required>
+                        </div>
+
+                      <div>
+    <label>Department</label>
+    <select name="dept_id" required>
+        <option value="">Select Department</option>
+
+        {% for department in departments %}
+            <option value="{{ department.dept_id }}">
+                {{ department.dept_name }}
+            </option>
+        {% endfor %}
+    </select>
+</div>
+
+                        <div>
+                            <label>Designation / Role</label>
+                            <input type="text" name="role"
+                                   placeholder="Enter designation">
+                        </div>
+
+                        <div>
+                            <label>Date of Joining</label>
+                            <input type="date" name="join_date" required>
+                        </div>
+                        <div>
+                            <label>Date of birth</label>
+                            <input type="date" name="birth_date" required>
+                        </div>
+
+                        <div>
+                            <label>Employee ID</label>
+                            <input type="text" value="Auto generated" disabled>
+                        </div>
+
+                        <div class="full">
+                            <label>Address</label>
+                            <textarea name="address" rows="4"
+                                      placeholder="Enter full address"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="actions">
+                        <a href="/dashboard" class="btn btn-cancel">Cancel</a>
+                        <button type="submit" class="btn btn-save">
+                            Register Employee
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
