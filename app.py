@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, Response, flash, session, jsonify
+from flask import Flask, render_template, request, redirect, Response, flash, session, jsonify, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import re
@@ -12,8 +12,17 @@ import io
 import os
 
 
+
+
 app = Flask(__name__)
 app.secret_key = 'employee-management-system-secret'
+# ---------------- EXTERNAL FILE UPLOAD FOLDER ----------------
+UPLOAD_FOLDER = os.path.join(
+    os.path.dirname(app.root_path),
+    'employee_uploads'
+)
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # ---------------- MYSQL CONNECTION ----------------
 try:
@@ -3105,20 +3114,10 @@ def submit_leave():
     if attachment and attachment.filename:
 
         filename = secure_filename(attachment.filename)
-
-        upload_folder = os.path.join(
-            app.root_path,
-            'static',
-            'uploads'
-        )
-
-        # Create uploads folder if it doesn't exist
-        os.makedirs(upload_folder, exist_ok=True)
-
-        # Save uploaded file
         attachment.save(
-            os.path.join(upload_folder, filename)
+            os.path.join(UPLOAD_FOLDER, filename)
         )
+
 
     # -----------------------------------------------------
     # INSERT LEAVE REQUEST
@@ -3159,6 +3158,28 @@ def submit_leave():
     return redirect('/employee-leave')
 
 cursor = db.cursor(dictionary=True)
+# =========================================================
+# VIEW LEAVE ATTACHMENT
+# =========================================================
+
+@app.route('/view-attachment/<path:filename>')
+def view_attachment(filename):
+
+    filename = secure_filename(filename)
+
+    file_path = os.path.join(
+        UPLOAD_FOLDER,
+        filename
+    )
+
+    if not os.path.exists(file_path):
+        return "File not found.", 404
+
+    return send_file(
+        file_path,
+        mimetype='application/pdf',
+        as_attachment=False
+    )
 
 
 

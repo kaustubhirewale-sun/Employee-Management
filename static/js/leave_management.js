@@ -1,4 +1,3 @@
-
 /* =====================================================
    LEAVE MANAGEMENT JAVASCRIPT
    ===================================================== */
@@ -180,10 +179,10 @@ document.querySelectorAll(".view-btn").forEach(function (button) {
                                     Uploaded document
                                 </small>
 
-                                <a href="/static/uploads/${encodeURIComponent(data.leave.attachment)}"
-                                   target="_blank">
-                                    View Document
-                                </a>
+                                <a href="/view-attachment/${encodeURIComponent(data.leave.attachment)}"
+                                 target="_blank">
+                                  View Document
+                                       </a>
                             </div>
                         `;
 
@@ -220,12 +219,7 @@ document.querySelectorAll(".view-btn").forEach(function (button) {
             });
 
 
-        /* Clear remarks */
-
-        document.getElementById("adminRemarks").value = "";
-
-
-        /* Enable/disable modal decision buttons */
+        /* Enable / disable modal decision buttons */
 
         updateModalButtons(status);
 
@@ -253,15 +247,11 @@ function updateModalButtons(status) {
     const rejectButton =
         document.getElementById("modalRejectBtn");
 
-    const saveButton =
-        document.getElementById("saveDecisionBtn");
-
 
     if (status === "Pending") {
 
         approveButton.style.display = "inline-flex";
         rejectButton.style.display = "inline-flex";
-        saveButton.style.display = "inline-flex";
 
     }
 
@@ -269,7 +259,6 @@ function updateModalButtons(status) {
 
         approveButton.style.display = "none";
         rejectButton.style.display = "none";
-        saveButton.style.display = "none";
 
     }
 
@@ -383,17 +372,18 @@ function updateLeaveStatus(leaveId, status) {
     .then(response => response.json())
 
     .then(data => {
-if (data.success) {
 
-    location.reload();
+        if (data.success) {
 
-}
+            location.reload();
 
-      else {
+        }
 
-    console.error(data.message);
+        else {
 
-}
+            console.error(data.message);
+
+        }
 
     })
 
@@ -401,16 +391,18 @@ if (data.success) {
 
         console.error("Status update error:", error);
 
-     
-
     });
 
 }
 
 
-document.querySelectorAll(".response-btn").forEach(function(button){
+/* =====================================================
+   INLINE REPLY ROW
+   ===================================================== */
 
-    button.addEventListener("click", function(){
+document.querySelectorAll(".response-btn").forEach(function (button) {
+
+    button.addEventListener("click", function () {
 
         const leaveId =
             button.getAttribute("data-leave-id");
@@ -418,16 +410,18 @@ document.querySelectorAll(".response-btn").forEach(function(button){
         const replyRow =
             document.getElementById("reply-row-" + leaveId);
 
-        if(replyRow){
+        if (replyRow) {
 
-            if(replyRow.style.display === "table-row"){
+            if (replyRow.style.display === "table-row") {
 
                 replyRow.style.display = "none";
 
-            }else{
+            }
+
+            else {
 
                 document.querySelectorAll(".reply-row")
-                    .forEach(row => {
+                    .forEach(function (row) {
 
                         row.style.display = "none";
 
@@ -436,32 +430,35 @@ document.querySelectorAll(".response-btn").forEach(function(button){
                 replyRow.style.display = "table-row";
 
             }
+
         }
 
     });
 
 });
+
+
 /* =====================================================
-   SAVE DECISION
+   INLINE REPLY — SEND
    ===================================================== */
 
-document.getElementById("saveDecisionBtn")
-    .addEventListener("click", function () {
+document.querySelectorAll(".send-reply-btn").forEach(function (button) {
 
-        if (!selectedLeaveId) {
+    button.addEventListener("click", function () {
 
-            
-            return;
-        }
+        const leaveId =
+            button.getAttribute("data-leave-id");
 
+        const textarea =
+            document.getElementById("reply-text-" + leaveId);
 
         const remarks =
-            document.getElementById("adminRemarks").value.trim();
+            textarea.value.trim();
 
 
         if (!remarks) {
 
-            
+            alert("Please write a reply before sending.");
 
             return;
         }
@@ -477,7 +474,7 @@ document.getElementById("saveDecisionBtn")
 
             body: JSON.stringify({
 
-                leave_id: selectedLeaveId,
+                leave_id: leaveId,
 
                 remarks: remarks
 
@@ -488,29 +485,57 @@ document.getElementById("saveDecisionBtn")
         .then(response => response.json())
 
         .then(data => {
-if (data.success) {
 
-    location.reload();
+            if (data.success) {
 
-}
+                location.reload();
 
-           else {
+            }
 
-    console.error(data.message);
+            else {
 
-}
+                console.error(data.message);
+
+                alert("Failed to send reply.");
+
+            }
 
         })
 
         .catch(error => {
 
-            console.error("Response error:", error);
-
-       
+            console.error("Reply send error:", error);
 
         });
 
     });
+
+});
+
+
+/* =====================================================
+   INLINE REPLY — CANCEL
+   ===================================================== */
+
+document.querySelectorAll(".cancel-reply-btn").forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+        const leaveId =
+            button.getAttribute("data-leave-id");
+
+        const replyRow =
+            document.getElementById("reply-row-" + leaveId);
+
+        if (replyRow) {
+
+            replyRow.style.display = "none";
+
+        }
+
+    });
+
+});
 
 
 /* =====================================================
@@ -556,77 +581,6 @@ document.addEventListener("keydown", function (event) {
         document.body.style.overflow = "";
 
     }
-
-});
-
-/* =====================================================
-   INLINE REPLY ROW — SEND / CANCEL
-   ===================================================== */
-
-document.querySelectorAll(".send-reply-btn").forEach(function (button) {
-
-    button.addEventListener("click", function () {
-
-        const leaveId = button.getAttribute("data-leave-id");
-
-        const textarea = document.getElementById("reply-text-" + leaveId);
-
-        const remarks = textarea.value.trim();
-
-        if (!remarks) {
-            alert("Please write a reply before sending.");
-            return;
-        }
-
-        fetch("/save-leave-response", {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                leave_id: leaveId,
-                remarks: remarks
-            })
-
-        })
-
-        .then(response => response.json())
-
-        .then(data => {
-
-            if (data.success) {
-                location.reload();
-            } else {
-                console.error(data.message);
-                alert("Failed to send reply.");
-            }
-
-        })
-
-        .catch(error => {
-            console.error("Reply send error:", error);
-        });
-
-    });
-
-});
-
-document.querySelectorAll(".cancel-reply-btn").forEach(function (button) {
-
-    button.addEventListener("click", function () {
-
-        const leaveId = button.getAttribute("data-leave-id");
-
-        const replyRow = document.getElementById("reply-row-" + leaveId);
-
-        if (replyRow) {
-            replyRow.style.display = "none";
-        }
-
-    });
 
 });
 
@@ -683,5 +637,3 @@ document.querySelectorAll(".filter-btn").forEach(function (button) {
     });
 
 });
-
-
