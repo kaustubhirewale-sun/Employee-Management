@@ -20,8 +20,8 @@ try:
     db = mysql.connector.connect(
         host=os.getenv('MYSQL_HOST', 'localhost'),
         user=os.getenv('MYSQL_USER', 'root'),
-        password=os.getenv('MYSQL_PASSWORD', 'root'),
-        database=os.getenv('MYSQL_DATABASE', 'employee_db'),
+        password=os.getenv('MYSQL_PASSWORD', 'Kaustubhi@123'),
+        database=os.getenv('MYSQL_DATABASE', 'management_db'),
         autocommit=True
     )
     cursor = db.cursor(dictionary=True)
@@ -447,11 +447,15 @@ def dashboard():
     # =========================================================
     # SELECTED MONTH
     # =========================================================
-
-    current_month = request.args.get(
-        'month',
-        datetime.now().strftime('%Y-%m')
-    )
+    current_month = request.args.get('month', '').strip()
+    if not current_month:
+          current_month = datetime.now().strftime('%Y-%m')
+    else:
+        try:
+           datetime.strptime(current_month, '%Y-%m')
+        except ValueError:
+                   current_month = datetime.now().strftime('%Y-%m')
+    
 
 
     # =========================================================
@@ -2650,6 +2654,322 @@ def employee_salary():
     )
 
 # =========================================================
+# EMPLOYEE SALARY SLIP
+# =========================================================
+
+@app.route('/salary-slip/<int:salary_id>')
+def salary_slip(salary_id):
+
+    # -----------------------------------------------------
+    # CHECK EMPLOYEE LOGIN
+    # -----------------------------------------------------
+
+    if session.get('role') != 'employee':
+        return redirect('/')
+
+    employee_id = session.get('employee_id')
+
+    if not employee_id:
+        return "Employee account is not linked to an employee record.", 404
+
+
+    # -----------------------------------------------------
+    # GET EMPLOYEE + SALARY DETAILS
+    # -----------------------------------------------------
+
+    cursor.execute("""
+        SELECT
+            e.id,
+            e.employee_code,
+            e.first_name,
+            e.last_name,
+            e.role,
+            d.dept_name AS department,
+
+            s.id AS salary_id,
+            s.salary_month,
+            s.basic_salary,
+            s.allowance,
+            s.deduction,
+            s.net_salary,
+            s.payment_status,
+            s.payment_date
+
+        FROM salary s
+
+        JOIN employees e
+            ON s.employee_id = e.id
+
+        LEFT JOIN departments d
+            ON e.dept_id = d.dept_id
+
+        WHERE s.id = %s
+        AND s.employee_id = %s
+    """, (
+        salary_id,
+        employee_id
+    ))
+
+    result = cursor.fetchone()
+
+    if not result:
+        return "Salary record not found.", 404
+
+
+    # -----------------------------------------------------
+    # SEPARATE EMPLOYEE AND SALARY DATA
+    # -----------------------------------------------------
+
+    employee = {
+        'id': result['id'],
+        'employee_code': result['employee_code'],
+        'first_name': result['first_name'],
+        'last_name': result['last_name'],
+        'role': result['role'],
+        'department': result['department']
+    }
+
+    salary = {
+        'id': result['salary_id'],
+        'salary_month': result['salary_month'],
+        'basic_salary': result['basic_salary'],
+        'allowance': result['allowance'],
+        'deduction': result['deduction'],
+        'net_salary': result['net_salary'],
+        'payment_status': result['payment_status'],
+        'payment_date': result['payment_date']
+    }
+
+
+    return render_template(
+        'salary_slip.html',
+        employee=employee,
+        salary=salary
+    )
+@app.route('/download-salary-slip/<int:salary_id>')
+def download_salary_slip(salary_id):
+
+    if session.get('role') != 'employee':
+        return redirect('/')
+
+    employee_id = session.get('employee_id')
+
+    if not employee_id:
+        return "Employee account is not linked to an employee record.", 404
+
+    cursor.execute("""
+        SELECT
+            e.employee_code,
+            e.first_name,
+            e.last_name,
+            e.role,
+            d.dept_name AS department,
+
+            s.id,
+            s.salary_month,
+            s.basic_salary,
+            s.allowance,
+            s.deduction,
+            s.net_salary,
+            s.payment_status,
+            s.payment_date
+
+        FROM salary s
+        JOIN employees e
+            ON s.employee_id = e.id
+        LEFT JOIN departments d
+            ON e.dept_id = d.dept_id
+
+        WHERE s.id = %s
+        AND s.employee_id = %s
+    """, (salary_id, employee_id))
+
+    salary = cursor.fetchone()
+    if not salary:
+        return "Salary record not found.", 404
+
+    from reportlab.lib.pagesizes import A4
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+    from reportlab.lib import colors
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.enums import TA_CENTER
+    from reportlab.lib.units import mm
+
+    pdf_buffer = io.BytesIO()
+
+    doc = SimpleDocTemplate(
+        pdf_buffer,
+        pagesize=A4,
+        rightMargin=20 * mm,
+        leftMargin=20 * mm,
+        topMargin=20 * mm,
+        bottomMargin=20 * mm
+    )
+
+    styles = getSampleStyleSheet()
+
+    title_style = ParagraphStyle(
+        'TitleStyle',
+        parent=styles['Title'],
+        fontSize=20,
+        alignment=TA_CENTER,
+        spaceAfter=5
+    )
+
+    subtitle_style = ParagraphStyle(
+        'SubtitleStyle',
+        parent=styles['Normal'],
+        fontSize=12,
+        alignment=TA_CENTER,
+        textColor=colors.grey,
+        spaceAfter=20
+    )
+
+    heading_style = ParagraphStyle(
+        'HeadingStyle',
+        parent=styles['Heading2'],
+        fontSize=13,
+        spaceBefore=10,
+        spaceAfter=10
+    )
+
+    normal_style = styles['Normal']
+
+    elements = []
+
+    # Header
+    elements.append(
+        Paragraph("Employee Management System", title_style)
+    )
+
+    elements.append(
+        Paragraph("Salary Slip", subtitle_style)
+    )
+
+    # Employee Information
+    elements.append(
+        Paragraph("Employee Information", heading_style)
+    )
+
+    employee_data = [
+        ["Employee Name", f"{salary['first_name']} {salary['last_name']}"],
+        ["Employee Code", salary['employee_code'] or "--"],
+        ["Department", salary['department'] or "--"],
+        ["Role", salary['role'] or "--"]
+    ]
+
+    employee_table = Table(
+        employee_data,
+        colWidths=[50 * mm, 110 * mm]
+    )
+
+    employee_table.setStyle(
+        TableStyle([
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#eef2ff')),
+            ('TEXTCOLOR', (0, 0), (0, -1), colors.HexColor('#172554')),
+            ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#dbe2ea')),
+            ('PADDING', (0, 0), (-1, -1), 9)
+        ])
+    )
+
+    elements.append(employee_table)
+    elements.append(Spacer(1, 15))
+
+    # Salary Details
+    elements.append(
+        Paragraph("Salary Details", heading_style)
+    )
+
+    salary_data = [
+        ["Salary Month", salary['salary_month'].strftime('%B %Y')],
+        ["Basic Salary", f"Rs. {salary['basic_salary'] or 0:.2f}"],
+        ["Allowance", f"Rs. {salary['allowance'] or 0:.2f}"],
+        ["Deduction", f"Rs. {salary['deduction'] or 0:.2f}"],
+        ["Net Salary", f"Rs. {salary['net_salary'] or 0:.2f}"]
+    ]
+
+    salary_table = Table(
+        salary_data,
+        colWidths=[50 * mm, 110 * mm]
+    )
+
+    salary_table.setStyle(
+        TableStyle([
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#f8fafc')),
+            ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#dbe2ea')),
+            ('PADDING', (0, 0), (-1, -1), 9),
+
+            ('BACKGROUND', (0, 4), (-1, 4), colors.HexColor('#eef2ff')),
+            ('FONTNAME', (0, 4), (-1, 4), 'Helvetica-Bold')
+        ])
+    )
+
+    elements.append(salary_table)
+    elements.append(Spacer(1, 15))
+
+    # Payment Information
+    elements.append(
+        Paragraph("Payment Information", heading_style)
+    )
+
+    payment_date = (
+        salary['payment_date'].strftime('%d %b %Y')
+        if salary['payment_date']
+        else "--"
+    )
+
+    payment_data = [
+        ["Payment Status", salary['payment_status'] or "Pending"],
+        ["Payment Date", payment_date]
+    ]
+
+    payment_table = Table(
+        payment_data,
+        colWidths=[50 * mm, 110 * mm]
+    )
+
+    payment_table.setStyle(
+        TableStyle([
+            ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#f8fafc')),
+            ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#dbe2ea')),
+            ('PADDING', (0, 0), (-1, -1), 9)
+        ])
+    )
+
+    elements.append(payment_table)
+    elements.append(Spacer(1, 25))
+
+    elements.append(
+        Paragraph(
+            "This salary slip is generated from the Employee Management System.",
+            normal_style
+        )
+    )
+
+    doc.build(elements)
+
+    pdf_buffer.seek(0)
+
+    filename = (
+        f"Salary_Slip_{salary['employee_code']}_"
+        f"{salary['salary_month'].strftime('%B_%Y')}.pdf"
+    )
+
+    return Response(
+        pdf_buffer.getvalue(),
+        mimetype='application/pdf',
+        headers={
+            'Content-Disposition': f'attachment; filename="{filename}"'
+        }
+    )
+
+# =========================================================
 # EMPLOYEE LEAVE REQUEST
 # =========================================================
 
@@ -2837,6 +3157,9 @@ def submit_leave():
     cursor.close()
 
     return redirect('/employee-leave')
+
+cursor = db.cursor(dictionary=True)
+
 
 
 # ---------------- RUN APP ----------------

@@ -53,7 +53,7 @@
         </a>
 
         <a href="/employee-leave">
-            📅 Leave Management
+          📋 Leave Management
         </a>
 
     </nav>
@@ -62,13 +62,14 @@
 
 
 <!-- =====================================================
-     TOP BAR
+     MAIN CONTENT
 ===================================================== -->
 
-<header class="topbar">
+<div class="main-content">
+
+    <header class="topbar">
 
     <div>
-
         <h1>Salary</h1>
 
         <p>
@@ -78,9 +79,7 @@
                 {{ employee.last_name }}
             </strong>
         </p>
-
     </div>
-
 
     <a href="/" class="logout-btn">
         Logout
@@ -88,12 +87,11 @@
 
 </header>
 
+    <!-- =================================================
+         MAIN
+    ================================================= -->
 
-<!-- =====================================================
-     MAIN
-===================================================== -->
-
-<main class="dashboard-container">
+    <main class="dashboard-container">
 
 
     <!-- =================================================
@@ -355,7 +353,9 @@
 
                         <th>Status</th>
 
-                        <th>Payment Date</th>
+                       <th>Payment Date</th>
+
+                       <th>Action</th>
 
                     </tr>
 
@@ -441,6 +441,11 @@
                             {% endif %}
 
                         </td>
+                        <td>
+    <a href="/salary-slip/{{ salary.id }}" class="slip-btn">
+        View Salary Slip
+    </a>
+</td>
 
                     </tr>
 
@@ -468,8 +473,9 @@
     </section>
 
 
-</main>
+    </main>
+
+</div>
 
 </body>
-
 </html>

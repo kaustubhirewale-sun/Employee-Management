@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Salary Slip</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='salary_slip.css') }}">
+
+</head>
+
+<body>
+
+<div class="slip-container">
+
+    <!-- HEADER -->
+
+    <div class="slip-header">
+
+        <div>
+            <h1>Employee Management System</h1>
+            <p>Salary Slip</p>
+        </div>
+
+        <a href="/employee-salary" class="back-btn">
+            ← Back
+        </a>
+
+    </div>
+
+
+    <!-- EMPLOYEE INFORMATION -->
+
+    <section class="slip-section">
+
+        <h2>Employee Information</h2>
+
+        <div class="details-grid">
+
+            <div>
+                <span>Employee Name</span>
+                <strong>
+                    {{ employee.first_name }}
+                    {{ employee.last_name }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Employee Code</span>
+                <strong>
+                    {{ employee.employee_code }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Department</span>
+                <strong>
+                    {{ employee.department or '--' }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Role</span>
+                <strong>
+                    {{ employee.role or '--' }}
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SALARY INFORMATION -->
+
+    <section class="slip-section">
+
+        <h2>Salary Details</h2>
+
+        <div class="salary-details">
+
+            <div class="salary-row">
+
+                <span>Salary Month</span>
+
+                <strong>
+                    {{ salary.salary_month.strftime('%B %Y') }}
+                </strong>
+
+            </div>
+
+
+            <div class="salary-row">
+
+                <span>Basic Salary</span>
+
+                <strong>
+                    ₹{{ "%.2f"|format(salary.basic_salary or 0) }}
+                </strong>
+
+            </div>
+
+
+            <div class="salary-row">
+
+                <span>Allowance</span>
+
+                <strong>
+                    ₹{{ "%.2f"|format(salary.allowance or 0) }}
+                </strong>
+
+            </div>
+
+
+            <div class="salary-row deduction-row">
+
+                <span>Deduction</span>
+
+                <strong>
+                    ₹{{ "%.2f"|format(salary.deduction or 0) }}
+                </strong>
+
+            </div>
+
+
+            <div class="salary-row net-row">
+
+                <span>Net Salary</span>
+
+                <strong>
+                    ₹{{ "%.2f"|format(salary.net_salary or 0) }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PAYMENT INFORMATION -->
+
+    <section class="slip-section">
+
+        <h2>Payment Information</h2>
+
+        <div class="details-grid">
+
+            <div>
+                <span>Payment Status</span>
+
+                <strong class="status
+                    {% if salary.payment_status == 'Paid' %}
+                        paid
+                    {% elif salary.payment_status == 'Initiated' %}
+                        initiated
+                    {% else %}
+                        pending
+                    {% endif %}
+                ">
+                    {{ salary.payment_status or 'Pending' }}
+                </strong>
+            </div>
+
+
+            <div>
+
+                <span>Payment Date</span>
+
+                <strong>
+
+                    {% if salary.payment_date %}
+
+                        {{ salary.payment_date.strftime('%d %b %Y') }}
+
+                    {% else %}
+
+                        --
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DOWNLOAD -->
+
+    <div class="download-area">
+
+        <a href="/download-salary-slip/{{ salary.id }}"
+           class="download-btn">
+
+            Download Salary Slip
+
+        </a>
+
+    </div>
+
+
+</div>
+
+</body>
+</html>

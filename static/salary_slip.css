@@ -1,0 +1,345 @@
+/* =========================================================
+   SALARY SLIP
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    font-family:
+        'Segoe UI',
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+    background: linear-gradient(
+        150deg,
+        #f1f5ff 0%,
+        #eef2ff 50%,
+        #f8fafc 100%
+    );
+
+    color: #172033;
+
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.slip-container {
+    width: 900px;
+    max-width: calc(100% - 40px);
+
+    margin: 40px auto;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 20px;
+
+    padding: 35px;
+
+    box-shadow:
+        0 15px 40px rgba(23, 37, 84, 0.10);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.slip-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    margin-bottom: 25px;
+}
+
+.slip-header h1 {
+    margin: 0;
+
+    color: #172554;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+.slip-header p {
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.back-btn,
+.download-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    border-radius: 10px;
+
+    transition: all 0.2s ease;
+}
+
+.back-btn {
+    padding: 10px 16px;
+
+    background: #eef2ff;
+
+    color: #4338ca;
+
+    border: 1px solid #c7d2fe;
+
+    font-size: 13px;
+}
+
+.back-btn:hover {
+    background: #e0e7ff;
+
+    transform: translateY(-2px);
+}
+
+.download-btn {
+    padding: 13px 22px;
+
+    background: #5146e5;
+
+    color: #ffffff;
+
+    font-size: 14px;
+}
+
+.download-btn:hover {
+    background: #4338ca;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 16px rgba(79, 70, 229, 0.20);
+}
+
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.slip-section {
+    margin-bottom: 25px;
+
+    padding: 22px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+}
+
+.slip-section h2 {
+    margin: 0 0 18px;
+
+    color: #172554;
+
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   DETAILS
+========================================================= */
+
+.details-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+.details-grid div {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.details-grid span {
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+.details-grid strong {
+    color: #172554;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   SALARY DETAILS
+========================================================= */
+
+.salary-details {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+.salary-row {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #eef2f7;
+}
+
+.salary-row:last-child {
+    border-bottom: none;
+}
+
+.salary-row span {
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+.salary-row strong {
+    color: #172554;
+
+    font-size: 14px;
+}
+
+.deduction-row strong {
+    color: #dc2626;
+}
+
+.net-row {
+    background: #eef2ff;
+}
+
+.net-row span,
+.net-row strong {
+    color: #172554;
+
+    font-size: 16px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+    width: fit-content;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 11px !important;
+}
+
+.status.paid {
+    background: #dcfce7;
+
+    color: #15803d !important;
+}
+
+.status.pending {
+    background: #fef3c7;
+
+    color: #a16207 !important;
+}
+
+.status.initiated {
+    background: #dbeafe;
+
+    color: #1d4ed8 !important;
+}
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+.download-area {
+    display: flex;
+
+    justify-content: flex-end;
+
+    padding-top: 5px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .slip-container {
+        max-width: calc(100% - 20px);
+
+        margin: 20px auto;
+
+        padding: 20px;
+    }
+
+    .slip-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .salary-row {
+        gap: 15px;
+    }
+
+}
