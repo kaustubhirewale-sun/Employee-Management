@@ -9,9 +9,15 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f5f7fb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(
+        150deg,
+        #f1f5ff 0%,
+        #eef2ff 50%,
+        #f8fafc 100%
+    );
     color: #172033;
+    min-height: 100vh;
 }
 
 /* ---------- MAIN CONTAINER ---------- */
@@ -25,33 +31,41 @@ body {
 /* ---------- TOPBAR ---------- */
 
 .topbar {
+    background: linear-gradient(
+        150deg,
+        #172554 0%,
+        #1e3a8a 50%,
+        #2665ec 100%
+    );
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 28px;
+    align-items: center;
+    padding: 22px 40px;
+    margin: -32px -40px 30px -40px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.10);
 }
 
 .title-area h1 {
     font-size: 30px;
     font-weight: 700;
-    color: #172033;
+    color: #ffffff;
     margin-bottom: 8px;
 }
 
 .title-area p {
     font-size: 14px;
-    color: #64748b;
+    color: rgba(255, 255, 255, 0.82);
 }
-
 .back-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
-    padding: 10px 16px;
+    padding: 9px 18px;
     background: #ffffff;
-    color: #334155;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
+    color: #2539f4;
+    border: none;
+    border-radius: 8px;
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -59,15 +73,16 @@ body {
 }
 
 .back-btn:hover {
-    background: #f8fafc;
-    border-color: #cbd5e1;
+    background: #e0e7ff;
+    color: #2539f4;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
 }
 
 
 /* =========================================================
    SUMMARY CARDS
    ========================================================= */
-
 .leave-cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -77,10 +92,17 @@ body {
 
 .leave-card {
     background: #ffffff;
-    border: 1px solid #e8edf3;
-    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
     padding: 22px 24px;
-    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.leave-card:hover {
+    transform: translateY(-6px);
+    border-color: #c7d2fe;
+    box-shadow: 0 20px 40px rgba(79, 70, 229, 0.15);
 }
 
 .card-title {
@@ -96,29 +118,52 @@ body {
     color: #172033;
 }
 
+.leave-cards .leave-card:nth-child(1) .card-number {
+    color: #2563eb;
+}
+
+.leave-cards .leave-card:nth-child(2) .card-number {
+    color: #d97706;
+}
+
+.leave-cards .leave-card:nth-child(3) .card-number {
+    color: #16a34a;
+}
+
+.leave-cards .leave-card:nth-child(4) .card-number {
+    color: #dc2626;
+}
+
 
 /* =========================================================
    TABLE CARD
    ========================================================= */
+/* TABLE CARD */
 
 .table-card {
     background: #ffffff;
-    border: 1px solid #e8edf3;
-    border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
     overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.table-card:hover {
+    box-shadow: 0 20px 40px rgba(79, 70, 229, 0.12);
 }
 
 .table-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 24px 26px;
-    border-bottom: 1px solid #e8edf3;
+    padding: 22px 24px;
+    border-bottom: 1px solid #eef2f7;
+    background: #ffffff;
 }
 
 .table-header h3 {
-    font-size: 18px;
+    font-size: 19px;
     color: #172033;
     font-weight: 700;
     margin-bottom: 5px;
@@ -126,13 +171,15 @@ body {
 
 .table-header p {
     font-size: 13px;
-    color: #94a3b8;
+    color: #64748b;
 }
 
 
 /* =========================================================
    FILTER BUTTONS
    ========================================================= */
+
+/* FILTER BUTTONS */
 
 .leave-filters {
     display: flex;
@@ -144,29 +191,38 @@ body {
     border: 1px solid #e2e8f0;
     background: #ffffff;
     color: #64748b;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 13px;
+    padding: 9px 15px;
+    border-radius: 9px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .filter-btn:hover {
-    background: #f8fafc;
-    color: #334155;
+    background: #eef2ff;
+    color: #2539f4;
+    border-color: #c7d2fe;
+    transform: translateY(-1px);
 }
 
 .filter-btn.active {
-    background: #172033;
+    background: #5146e5;
     color: #ffffff;
-    border-color: #172033;
+    border-color: #5146e5;
+    box-shadow: 0 4px 10px rgba(81, 70, 229, 0.18);
 }
 
-
+.filter-btn.active:hover {
+    background: #4338ca;
+    border-color: #4338ca;
+    color: #ffffff;
+}
 /* =========================================================
    TABLE
    ========================================================= */
+
+/* TABLE */
 
 .table-wrapper {
     width: 100%;
@@ -184,31 +240,32 @@ body {
 }
 
 #leaveTable th {
-    padding: 14px 16px;
+    padding: 15px 17px;
     text-align: left;
-    font-size: 11px;
-    color: #64748b;
+    font-size: 12px;
+    color: #475569;
     text-transform: uppercase;
     letter-spacing: 0.4px;
     font-weight: 700;
     white-space: nowrap;
-    border-bottom: 1px solid #e8edf3;
+    border-bottom: 1px solid #eef2f7;
 }
 
 #leaveTable td {
-    padding: 17px 16px;
+    padding: 15px 17px;
     font-size: 13px;
-    color: #475569;
+    color: #334155;
     border-bottom: 1px solid #eef2f7;
     vertical-align: middle;
+    white-space: nowrap;
 }
 
 #leaveTable tbody tr {
-    transition: 0.15s ease;
+    transition: 0.2s ease;
 }
 
 #leaveTable tbody tr:hover {
-    background: #fafbfc;
+    background: #f8faff;
 }
 
 #leaveTable tbody tr:last-child td {
@@ -219,6 +276,8 @@ body {
 /* =========================================================
    EMPLOYEE
    ========================================================= */
+
+/* EMPLOYEE */
 
 .employee-info {
     display: flex;
@@ -231,14 +290,20 @@ body {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: #e0e7ff;
-    color: #4338ca;
+    background: #eef2ff;
+    color: #5146e5;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 12px;
     font-weight: 700;
     flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+#leaveTable tbody tr:hover .employee-avatar {
+    background: #e0e7ff;
+    transform: scale(1.05);
 }
 
 .employee-info strong {
@@ -254,8 +319,6 @@ body {
     color: #94a3b8;
     font-size: 11px;
 }
-
-
 /* =========================================================
    LEAVE DATES
    ========================================================= */
@@ -335,13 +398,14 @@ body {
 .status {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 6px 10px;
+    justify-content: center;
+    padding: 6px 12px;
     border-radius: 20px;
     font-size: 11px;
     font-weight: 700;
     white-space: nowrap;
 }
+
 
 .status-approved {
     background: #dcfce7;
@@ -363,6 +427,8 @@ body {
    ACTION BUTTONS
    ========================================================= */
 
+/* ACTION BUTTONS */
+
 .actions {
     display: flex;
     align-items: center;
@@ -375,16 +441,19 @@ body {
 .reject-btn,
 .response-btn {
     height: 34px;
-    border-radius: 8px;
+    border-radius: 9px;
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
-    transition: 0.2s ease;
+    transition: all 0.2s ease;
 }
+
+/* VIEW */
 
 .view-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 5px;
     padding: 0 11px;
     background: #ffffff;
@@ -393,9 +462,14 @@ body {
 }
 
 .view-btn:hover {
-    background: #f8fafc;
-    border-color: #cbd5e1;
+    background: #eef2ff;
+    border-color: #c7d2fe;
+    color: #2539f4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(37, 57, 244, 0.08);
 }
+
+/* APPROVE */
 
 .approve-btn {
     width: 34px;
@@ -406,7 +480,12 @@ body {
 
 .approve-btn:hover {
     background: #dcfce7;
+    border-color: #86efac;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.10);
 }
+
+/* REJECT */
 
 .reject-btn {
     width: 34px;
@@ -417,19 +496,27 @@ body {
 
 .reject-btn:hover {
     background: #fee2e2;
+    border-color: #fca5a5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.10);
 }
+
+/* REPLY */
 
 .response-btn {
     width: 34px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #64748b;
+    background: #eef2ff;
+    border: 1px solid #dbe3ff;
+    color: #4055d6;
 }
 
 .response-btn:hover {
-    background: #f1f5f9;
+    background: #e0e7ff;
+    border-color: #c7d2fe;
+    color: #2539f4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(37, 57, 244, 0.10);
 }
-
 
 /* =========================================================
    EMPTY ROW

@@ -1,13 +1,9 @@
 FROM python:3.11-slim
 
-WORKDIR /app
+WORKDIR /employee-project
 
 COPY requirement.txt .
-
-RUN pip install --no-cache-dir -r requirement.txt
-
+RUN pip install -r requirement.txt
 COPY . .
-
-EXPOSE 5000
-
+RUN pip install flask
 CMD ["python", "app.py"]

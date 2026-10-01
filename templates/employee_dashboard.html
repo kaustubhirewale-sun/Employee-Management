@@ -30,35 +30,39 @@
             <a href="/employee-dashboard" class="active">🏠 Dashboard</a>
              <a href="/employee-attendance">📅 Attendance</a>
             <a href="/employee-salary">💰 Salary</a>
-            <a href="/employee-leave">📅 Leave Management</a>
+            <a href="/employee-leave">📋 Leave Management</a>
         </nav>
 </aside>
 
-<!-- ================= HEADER ================= -->
+<!-- ================= MAIN CONTENT ================= -->
 
-<header class="topbar">
+<div class="main-content">
 
-    <div>
-        <h1>Employee Dashboard</h1>
+    <!-- ================= HEADER ================= -->
 
-        <p>
-            Welcome back,
-            <strong>
-                {{ employee.first_name }} {{ employee.last_name }}
-            </strong>
-        </p>
-    </div>
+    <header class="topbar">
 
-    <a href="/" class="logout-btn">
-        Logout
-    </a>
+        <div>
+            <h1>Employee Dashboard</h1>
 
-</header>
+            <p>
+                Welcome back,
+                <strong>
+                    {{ employee.first_name }} {{ employee.last_name }}
+                </strong>
+            </p>
+        </div>
+
+        <a href="/" class="logout-btn">
+            Logout
+        </a>
+
+    </header>
 
 
-<!-- ================= MAIN ================= -->
+    <!-- ================= MAIN ================= -->
 
-<main class="dashboard-container">
+    <main class="dashboard-container">
 
 
     <!-- ================= PROFILE ================= -->
@@ -387,7 +391,9 @@
     </section>
 
 
-</main>
+    </main>
+
+</div>
 
 </body>
 </html>

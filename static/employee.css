@@ -1,6 +1,11 @@
-/* ================================
+
+/* =========================================================
+   EMPLOYEE LIST PAGE
+   ========================================================= */
+
+/* =========================
    RESET
-================================ */
+========================= */
 
 * {
     margin: 0;
@@ -9,225 +14,284 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f5f7fb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f8fafc, #eef2ff);
     color: #172033;
+    min-height: 100vh;
 }
 
 
+
+
+
+
+/* =========================
+   NAVBAR
+========================= */
 /* ================================
-   TOP HEADER
+   TOP NAVBAR
 ================================ */
 
-body::before {
-    content: "Employee Management System";
+.navbar{
+    width:100%;
+    height:90px;
 
-    display: flex;
-    align-items: center;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 
-    height: 80px;
-    padding: 0 40px;
+    padding:0 40px;
 
-    background: #0f172a;
-    color: white;
+    background:linear-gradient(
+        135deg,
+        #172554 0%,
+        #1e3a8a 50%,
+        #2665ec 100%
+    );
+   
 
-    font-size: 21px;
-    font-weight: 700;
+    box-shadow:
+        0 5px 20px rgba(37,57,244,0.20);
+}
+
+.navbar-title{
+    color:white;
+
+    font-size:22px;
+    font-weight:700;
 }
 
 
 /* ================================
-   NAVBAR / BACK BUTTON
+   BACK BUTTON
 ================================ */
 
-.navbar {
-    width: 100%;
-    padding: 20px 40px 0;
+.back-btn{
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:9px 18px;
+
+    background:white;
+    color:#2539f4;
+
+    text-decoration:none;
+
+    border-radius:8px;
+
+    font-size:14px;
+    font-weight:600;
+
+    transition:0.2s ease;
 }
 
-.back-btn {
-    display: inline-flex;
-    align-items: center;
+.back-btn:hover{
+    background:#e0e7ff;
 
-    padding: 9px 18px;
-
-    background: white;
-    color: #2563eb;
-
-    text-decoration: none;
-
-    border: 1px solid #dbe3ef;
-    border-radius: 7px;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-
-    transition: 0.2s ease;
+    transform:translateY(-1px);
 }
 
-.back-btn:hover {
-    background: #2563eb;
-    color: white;
-    border-color: #2563eb;
-}
-
-
-/* ================================
+/* =========================
    MAIN CONTAINER
-================================ */
+========================= */
 
 .dashboard-container {
     width: 100%;
-    max-width: 1450px;
+    max-width: 1500px;
 
     margin: 0 auto;
 
-    padding: 25px 40px 60px;
+    padding: 28px 42px 60px;
 }
 
 
-/* ================================
+/* =========================
    PAGE HEADER
-================================ */
+========================= */
 
 .page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 .page-header h2 {
-    margin: 0;
+    position: relative;
 
-    font-size: 30px;
+    font-size: 29px;
     font-weight: 700;
 
     color: #172033;
 }
 
+.page-header h2::after {
+    content: "";
 
-/* ================================
+    display: block;
+
+    width: 42px;
+    height: 4px;
+
+    margin-top: 7px;
+
+    background: #5146e5;
+    border-radius: 10px;
+}
+
+
+/* =========================
    ADD EMPLOYEE BUTTON
-================================ */
+========================= */
 
 .add-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 6px;
 
-    padding: 11px 18px;
+    padding: 11px 19px;
 
     background: #5146e5;
     color: white;
 
-    border-radius: 9px;
+    border-radius: 10px;
 
     text-decoration: none;
 
     font-size: 14px;
     font-weight: 600;
 
-    transition: 0.2s ease;
+    box-shadow: 0 5px 12px rgba(81, 70, 229, 0.18);
+
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 .add-btn:hover {
     background: #4338ca;
-    transform: translateY(-1px);
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 9px 20px rgba(81, 70, 229, 0.25);
+}
+
+.add-btn:active {
+    transform: translateY(0);
 }
 
 
-/* ================================
+/* =========================
    TABLE CARD
-================================ */
+========================= */
 
 .table-box {
     width: 100%;
 
-    background: white;
+    background: rgba(255, 255, 255, 0.96);
 
-    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
 
-    padding: 20px 22px 12px;
+    padding: 22px;
 
-    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.06);
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.07);
 
     overflow-x: auto;
+
+    transition:
+        box-shadow 0.3s ease,
+        transform 0.3s ease;
+}
+
+.table-box:hover {
+    box-shadow:
+        0 16px 35px rgba(15, 23, 42, 0.10);
 }
 
 
-/* ================================
+/* =========================
    SEARCH AREA
-================================ */
+========================= */
 
 .search-area {
     width: 100%;
-
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 
-/* ================================
+/* =========================
    SEARCH BOX
-================================ */
+========================= */
 
 .search-box {
     display: flex;
     align-items: center;
 
-    width: 430px;
-    height: 42px;
+    width: 460px;
+    max-width: 100%;
+    height: 45px;
 
-    padding: 0 6px 0 12px;
+    padding: 0 6px 0 13px;
 
+    background: #f8fafc;
+
+    border: 1px solid #dbe3ef;
+    border-radius: 10px;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.search-box:hover {
     background: white;
-
-    border: 1px solid #dbe3f0;
-
-    border-radius: 8px;
-
-    transition: 0.2s ease;
+    border-color: #c7d2fe;
 }
 
 .search-box:focus-within {
+    background: white;
     border-color: #5146e5;
 
     box-shadow:
-        0 0 0 3px rgba(81, 70, 229, 0.08);
+        0 0 0 4px rgba(81, 70, 229, 0.09);
 }
 
 
-/* ================================
+/* =========================
    SEARCH ICON
-================================ */
+========================= */
 
 .search-icon {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 20px;
+    width: 22px;
 
     margin-right: 8px;
 
-    color: #94a3b8;
+    color: #64748b;
 
     font-size: 20px;
 }
 
 
-/* ================================
+/* =========================
    SEARCH INPUT
-================================ */
+========================= */
 
 .search-box input {
     flex: 1;
 
     min-width: 0;
-
     height: 100%;
 
     border: none;
@@ -235,9 +299,10 @@ body::before {
 
     background: transparent;
 
-    font-size: 14px;
-
     color: #334155;
+
+    font-family: inherit;
+    font-size: 14px;
 }
 
 .search-box input::placeholder {
@@ -245,36 +310,40 @@ body::before {
 }
 
 
-/* ================================
+/* =========================
    SEARCH BUTTON
-================================ */
+========================= */
 
 .search-btn {
-    height: 32px;
+    height: 33px;
 
     padding: 0 16px;
 
-    margin-left: 8px;
-
     border: none;
-
-    border-radius: 6px;
+    border-radius: 7px;
 
     background: #5146e5;
-
     color: white;
 
+    font-family: inherit;
     font-size: 13px;
-
     font-weight: 600;
 
     cursor: pointer;
 
-    transition: 0.2s ease;
+    transition:
+        background 0.25s ease,
+        transform 0.2s ease,
+        box-shadow 0.25s ease;
 }
 
 .search-btn:hover {
     background: #4338ca;
+
+    box-shadow:
+        0 4px 10px rgba(79, 70, 229, 0.20);
+
+    transform: translateY(-1px);
 }
 
 .search-btn:active {
@@ -282,9 +351,9 @@ body::before {
 }
 
 
-/* ================================
+/* =========================
    SEARCH MESSAGE
-================================ */
+========================= */
 
 .search-message {
     min-height: 20px;
@@ -295,150 +364,201 @@ body::before {
 }
 
 
-/* ================================
-   EMPLOYEE NOT FOUND
-================================ */
+/* =========================
+   NOT FOUND MESSAGE
+========================= */
 
 .not-found-message {
     color: #dc2626;
 
     font-size: 13px;
-
     font-weight: 600;
 }
 
 
-/* ================================
+/* =========================
    SEARCH HIGHLIGHT
-================================ */
+========================= */
 
 .search-highlight {
-    background: #fef08a;
-
-    color: #172033;
+    background: #eef2ff;
+    color: #4338ca;
 
     font-weight: 700;
 
     padding: 2px 4px;
 
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
 
-/* ================================
-   MATCHED EMPLOYEE ROW
-================================ */
+/* =========================
+   SEARCH RESULT ROW
+========================= */
 
 .search-result td {
-    background: #eef2ff !important;
+    background: #f5f3ff !important;
 }
 
 
-/* ================================
+/* =========================
    TABLE
-================================ */
+========================= */
 
 .employee-table {
     width: 100%;
 
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
 
     white-space: nowrap;
 }
 
 
-/* ================================
+/* =========================
    TABLE HEADER
-================================ */
+========================= */
 
-.employee-table th {
-    text-align: left;
+.employee-table thead th {
+    padding: 14px 16px;
 
-    padding: 13px 15px;
-
-    background: #f8fafc;
+    background: #f1f5f9;
 
     color: #334155;
 
-    font-size: 13px;
+    text-align: left;
 
+    font-size: 12px;
     font-weight: 700;
 
-    border-bottom: 1px solid #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.35px;
+
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #dbe3ef;
+}
+
+.employee-table thead th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.employee-table thead th:last-child {
+    border-top-right-radius: 10px;
 }
 
 
-/* ================================
+/* =========================
    TABLE DATA
-================================ */
+========================= */
 
-.employee-table td {
-    padding: 15px;
+.employee-table tbody td {
+    padding: 16px;
 
-    font-size: 14px;
+    background: white;
 
     color: #475569;
 
+    font-size: 14px;
+
     border-bottom: 1px solid #eef2f7;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
 }
 
 
-/* ================================
-   TABLE ROW
-================================ */
+/* =========================
+   TABLE ROW HOVER
+========================= */
 
 .employee-table tbody tr {
-    transition: background 0.2s ease;
+    position: relative;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.employee-table tbody tr:hover {
+.employee-table tbody tr:hover td {
     background: #f8faff;
+
+    color: #334155;
 }
 
-.employee-table tr:last-child td {
+.employee-table tbody tr:hover td:first-child {
+    color: #4f46e5;
+}
+
+
+/* subtle row movement */
+.employee-table tbody tr:hover {
+    transform: translateX(2px);
+}
+
+
+/* last row */
+.employee-table tbody tr:last-child td {
     border-bottom: none;
 }
 
 
-/* ================================
-   EMPLOYEE NAME
-================================ */
+/* =========================
+   EMPLOYEE ID
+========================= */
 
-.emp-name {
-    color: #5146e5;
-
-    font-weight: 600;
-
-    cursor: default;
+.employee-table tbody td:first-child {
+    color: #4f46e5;
+    font-weight: 700;
 }
 
 
-/* ================================
+/* =========================
+   EMPLOYEE NAME
+========================= */
+
+.emp-name {
+    color: #172033;
+
+    font-weight: 600;
+
+    transition: color 0.2s ease;
+}
+
+.employee-table tbody tr:hover .emp-name {
+    color: #4f46e5;
+}
+
+
+/* =========================
    ACTION BUTTONS
-================================ */
+========================= */
 
 .action-buttons {
     display: flex;
     align-items: center;
 
-    gap: 7px;
+    gap: 8px;
 }
 
 
-/* ================================
+/* =========================
    EDIT BUTTON
-================================ */
+========================= */
 
 .edit-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    padding: 7px 13px;
+    min-width: 52px;
+
+    padding: 7px 12px;
 
     background: #eef2ff;
-    color: #5146e5;
+    color: #4f46e5;
 
+    border: 1px solid #e0e7ff;
     border-radius: 7px;
 
     text-decoration: none;
@@ -446,28 +566,43 @@ body::before {
     font-size: 13px;
     font-weight: 600;
 
-    transition: 0.2s ease;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .edit-btn:hover {
-    background: #e0e7ff;
+    background: #4f46e5;
+    color: white;
+
+    border-color: #4f46e5;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 12px rgba(79, 70, 229, 0.18);
 }
 
 
-/* ================================
+/* =========================
    DELETE BUTTON
-================================ */
+========================= */
 
 .delete-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    padding: 7px 13px;
+    min-width: 60px;
 
-    background: #fef2f2;
+    padding: 7px 12px;
+
+    background: #fff1f2;
     color: #dc2626;
 
+    border: 1px solid #ffe4e6;
     border-radius: 7px;
 
     text-decoration: none;
@@ -475,38 +610,98 @@ body::before {
     font-size: 13px;
     font-weight: 600;
 
-    transition: 0.2s ease;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .delete-btn:hover {
-    background: #fee2e2;
+    background: #dc2626;
+    color: white;
+
+    border-color: #dc2626;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 12px rgba(220, 38, 38, 0.18);
 }
 
 
-/* ================================
-   MOBILE
-================================ */
+/* =========================
+   EMPTY TABLE
+========================= */
+
+.employee-table tbody:empty::after {
+    content: "No employees found";
+
+    display: block;
+
+    padding: 30px;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+    text-align: center;
+}
+
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+.table-box::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-box::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.table-box::-webkit-scrollbar-thumb {
+    background: #c7d2fe;
+    border-radius: 10px;
+}
+
+.table-box::-webkit-scrollbar-thumb:hover {
+    background: #818cf8;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .navbar {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+    .dashboard-container {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+    .page-header {
+        gap: 15px;
+    }
+}
+
 
 @media (max-width: 768px) {
 
-    body::before {
-        height: 70px;
-
-        padding: 0 20px;
-
-        font-size: 18px;
-    }
-
-
     .navbar {
-        padding: 15px 20px 0;
+        padding: 0 20px;
     }
-
 
     .dashboard-container {
-        padding: 20px;
+        padding: 20px 20px 40px;
     }
-
 
     .page-header {
         flex-direction: column;
@@ -516,28 +711,24 @@ body::before {
         gap: 14px;
     }
 
-
     .page-header h2 {
         font-size: 26px;
     }
-
 
     .add-btn {
         width: 100%;
     }
 
-
     .search-box {
         width: 100%;
     }
 
-
     .table-box {
         padding: 15px;
+        border-radius: 15px;
     }
 
-
     .employee-table {
-        min-width: 900px;
+        min-width: 1000px;
     }
 }

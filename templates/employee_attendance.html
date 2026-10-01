@@ -34,25 +34,13 @@
     </div>
 
 
-    <nav class="sidebar-menu">
-
-        <a href="/employee-dashboard">
-            🏠 Dashboard
-        </a>
-
-        <a href="/employee-attendance" class="active">
-            📅 My Attendance
-        </a>
-
-        <a href="/employee-salary">
-            💰 My Salary
-        </a>
-
-        <a href="/request-leave">
-            📝 Leave Request
-        </a>
-
-    </nav>
+    
+       <nav class="sidebar-menu">
+            <a href="/employee-dashboard" class="active">🏠 Dashboard</a>
+             <a href="/employee-attendance">📅 Attendance</a>
+            <a href="/employee-salary">💰 Salary</a>
+            <a href="/employee-leave">📋 Leave Management</a>
+        </nav>
 
 </aside>
 
@@ -62,30 +50,7 @@
 <div class="main-content">
 
 
-    <!-- ================= TOPBAR ================= -->
-
-    <header class="topbar">
-
-        <div>
-
-            <h1>My Attendance</h1>
-
-            <p>
-                View and track your attendance records
-            </p>
-
-        </div>
-
-
-
-        <a href="/employee-dashboard"
-           class="back-btn">
-
-            ← Back 
-
-        </a>
-
-    </header>
+    
 
 
     <!-- ================= CONTENT ================= -->
@@ -93,29 +58,34 @@
     <main class="dashboard-container">
 
 
-        <!-- ================= WELCOME ================= -->
+       <!-- ================= WELCOME ================= -->
 
-        <section class="welcome-card">
+<header class="topbar">
 
-            <div>
+    <div>
 
-                <h2>
-                    📅 Attendance Overview
-                </h2>
+        <h2>
+            📅 Attendance Overview
+        </h2>
 
-                <p>
-                    {{ employee.first_name }}
-                    {{ employee.last_name }}
-                    ·
-                    {{ employee.employee_code }}
-                </p>
+        <p>
+            {{ employee.first_name }}
+            {{ employee.last_name }}
+            ·
+            {{ employee.employee_code }}
+        </p>
 
-            </div>
-
-        </section>
+    </div>
 
 
-        
+    <a href="/employee-dashboard"
+       class="back-btn">
+
+        ← Back
+
+    </a>
+
+</header>
 
 
         <!-- ================= FILTER ================= -->

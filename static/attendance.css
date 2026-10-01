@@ -14,6 +14,92 @@ body {
     min-height: 100vh;
     padding: 28px 35px;
 }
+/* Sidebar */
+.sidebar{
+    width:300px;
+    background:linear-gradient(
+        180deg,
+        #172554 0%,
+        #1e3a8a 50%,
+        #2665ec 100%
+    );
+    padding:25px 18px;
+    color:white;
+    box-shadow:0 0 25px rgba(0,0,0,.15);
+}
+
+.sidebar-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:35px;
+}
+
+.sidebar-logo{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    background:#5146e5;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+}
+
+.sidebar-title{
+    font-size:18px;
+    font-weight:700;
+    color:white;
+}
+
+.sidebar-subtitle{
+    font-size:12px;
+    color:#dbeafe;
+}
+
+.sidebar-menu a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    text-decoration:none;
+    color:white;
+
+    padding:14px 16px;
+    border-radius:12px;
+
+    font-weight:600;
+    font-size:16px;
+
+    white-space:nowrap;
+}
+
+
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active{
+    background:rgba(255,255,255,.15);
+    transform:translateX(8px);
+    color:white;
+}
+
+.sidebar-menu a::before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:0;
+    width:4px;
+    height:100%;
+    background:white;
+    transform:scaleY(0);
+    transition:.3s;
+}
+
+.sidebar-menu a:hover::before,
+.sidebar-menu a.active::before{
+    transform:scaleY(1);
+}
 
 
 /* =========================
@@ -21,7 +107,12 @@ body {
 ========================= */
 
 .topbar {
-    background: #2539f4;
+    background: linear-gradient(
+        150deg,
+        #172554 0%,
+        #1e3a8a 50%,
+        #2665ec 100%
+    );
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -48,18 +139,22 @@ body {
 }
 
 .back-btn {
-    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 18px;
     background: white;
     color: #2539f4;
-    padding: 12px 24px;
-    border-radius: 14px;
-    font-size: 16px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
     font-weight: 600;
-    border: none;
+    transition: 0.2s ease;
 }
 
 .back-btn:hover {
-    background: #f8fafc;
+    background: #e0e7ff;
+    transform: translateY(-1px);
 }
 
 
@@ -101,10 +196,23 @@ body {
 }
 
 .stat-card {
-    background: white;
-    padding: 22px;
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    background:#ffffff;
+    padding:22px;
+    border-radius:20px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,0.08);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform:translateY(-6px);
+
+    box-shadow:
+        0 20px 40px rgba(79,70,229,0.15);
 }
 
 .stat-top {
@@ -146,7 +254,28 @@ body {
 
 .stat-card h2 {
     font-size: 32px;
+    font-weight: 700;
     margin-bottom: 5px;
+}
+
+/* PRESENT NUMBER */
+.stat-card.present h2 {
+    color: #16a34a;
+}
+
+/* ABSENT NUMBER */
+.stat-card.absent h2 {
+    color: #dc2626;
+}
+
+/* LEAVE NUMBER */
+.stat-card.leave h2 {
+    color: #d97706;
+}
+
+/* ATTENDANCE RATE */
+.stat-card.rate h2 {
+    color: #2563eb;
 }
 
 .stat-card p {
@@ -170,7 +299,21 @@ body {
 .neutral {
     color: #64748b;
 }
+.stats-grid .stat-card:nth-child(1) h2 {
+    color: #16a34a;
+}
 
+.stats-grid .stat-card:nth-child(2) h2 {
+    color: #dc2626;
+}
+
+.stats-grid .stat-card:nth-child(3) h2 {
+    color: #d97706;
+}
+
+.stats-grid .stat-card:nth-child(4) h2 {
+    color: #2563eb;
+}
 
 /* =========================
    FILTERS
@@ -245,21 +388,34 @@ body {
    APPLY FILTER
 ========================= */
 
-.primary-btn {
-    background: #5146e5;
+.primary-btn,
+.save-btn {
+    background: linear-gradient(
+        135deg,
+        #5146e5,
+        #4338ca
+    );
     color: white;
     border: none;
     box-shadow: 0 3px 10px rgba(81, 70, 229, 0.15);
 }
 
-.primary-btn:hover {
-    background: #4338ca;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 5px 15px rgba(81, 70, 229, 0.25);
+.primary-btn:hover,
+.save-btn:hover {
+    background: linear-gradient(
+        135deg,
+        #4338ca,
+        #3730a3
+    );
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 18px rgba(79,70,229,0.25);
 }
 
-.primary-btn:active {
+.primary-btn:active,
+.save-btn:active {
     transform: translateY(0);
 }
 /* =========================
@@ -274,30 +430,48 @@ body {
 }
 
 .card {
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    background:#ffffff;
+    border-radius:20px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,0.08);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
+.card:hover {
+    transform:translateY(-5px);
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.12);
+} 
 
 /* =========================
    ATTENDANCE TABLE
 ========================= */
-
 .attendance-card {
     overflow: hidden;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
 }
 
 .card-header {
-    padding: 20px 22px;
+    padding: 22px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #eef2f7;
+    background: #ffffff;
 }
 
 .card-header h3 {
     font-size: 19px;
+    font-weight: 700;
+    color: #172033;
     margin-bottom: 5px;
 }
 
@@ -308,12 +482,12 @@ body {
 
 .record-count {
     font-size: 12px;
-    color: #64748b;
-    background: #f1f5f9;
-    padding: 7px 10px;
+    color: #2539f4;
+    background: #eef2ff;
+    padding: 7px 11px;
     border-radius: 8px;
+    font-weight: 600;
 }
-
 .table-wrapper {
     overflow-x: auto;
 }
@@ -325,17 +499,19 @@ table {
 
 th {
     text-align: left;
-    padding: 14px 16px;
+    padding: 15px 17px;
     font-size: 12px;
-    color: #64748b;
+    font-weight: 700;
+    color: #475569;
     background: #f8fafc;
     white-space: nowrap;
 }
 
 td {
-    padding: 15px 16px;
+    padding: 15px 17px;
     border-bottom: 1px solid #eef2f7;
     font-size: 13px;
+    color: #334155;
     white-space: nowrap;
 }
 
@@ -343,20 +519,27 @@ tr:last-child td {
     border-bottom: none;
 }
 
-tr:hover {
-    background: #f8fafc;
+tbody tr {
+    transition: 0.2s ease;
+}
+
+tbody tr:hover {
+    background: #f8faff;
 }
 
 .employee-name {
     font-weight: 600;
+    color: #172033;
 }
 
 .status {
-    display: inline-block;
-    padding: 6px 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
     border-radius: 20px;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .status-present {
@@ -364,44 +547,67 @@ tr:hover {
     color: #166534;
 }
 
+.status-absent {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-leave {
+    background: #fef3c7;
+    color: #92400e;
+} 
+
 
 /* =========================
    QUICK MARK
 ========================= */
-
+/* QUICK MARK CARD */
 .quick-card {
     overflow: hidden;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e5e7eb;
 }
 
+/* QUICK MARK HEADER */
 .quick-header {
-    background: #5146e5;
+    background: linear-gradient(
+        150deg,
+        #172554 0%,
+        #1e3a8a 50%,
+        #2665ec 100%
+    );
     color: white;
-    padding: 20px 22px;
+    padding: 22px 24px;
 }
 
 .quick-header h3 {
+    color: white;
     font-size: 19px;
+    font-weight: 700;
     margin-bottom: 5px;
 }
 
 .quick-header p {
+    color: rgba(255,255,255,0.85);
     font-size: 13px;
-    opacity: 0.9;
 }
 
 .quick-form {
-    padding: 22px;
+    padding: 24px;
+    background: #ffffff;
 }
 
 .form-group {
-    margin-bottom: 17px;
+    margin-bottom: 18px;
 }
 
 .form-group > label {
     display: block;
     font-size: 13px;
     font-weight: 600;
-    margin-bottom: 7px;
+    margin-bottom: 8px;
     color: #334155;
 }
 
@@ -410,11 +616,22 @@ tr:hover {
 .form-group textarea,
 .employee-search input {
     width: 100%;
-    padding: 11px 12px;
+    padding: 12px 13px;
     border: 1px solid #dbe1ec;
-    border-radius: 9px;
+    border-radius: 10px;
     font-size: 13px;
-    background: white;
+    background: #ffffff;
+    color: #172033;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.form-group input[type="date"]:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.employee-search input:focus {
+    border-color: #2665ec;
+    box-shadow: 0 0 0 3px rgba(38,101,236,0.10);
 }
 
 
@@ -448,27 +665,73 @@ tr:hover {
 
 
 /* Status */
-
+/* STATUS BUTTONS */
 .status-buttons {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 9px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
 }
 
 .status-buttons label {
     border: 1px solid #dbe1ec;
-    border-radius: 9px;
-    padding: 10px;
+    border-radius: 10px;
+    padding: 11px 10px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 7px;
     font-size: 12px;
+    font-weight: 600;
     cursor: pointer;
     background: #f8fafc;
+    color: #475569;
+    transition: 0.2s ease;
+}
+
+.status-buttons label:hover {
+    transform: translateY(-2px);
+    border-color: #c7d2fe;
+    background: #eef2ff;
 }
 
 .status-buttons input {
     margin: 0;
+}
+
+/* PRESENT */
+.status-buttons label:has(input[value="Present"]) {
+    color: #15803d;
+}
+
+.status-buttons label:has(input[value="Present"]:checked) {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #166534;
+    box-shadow: 0 4px 12px rgba(22,101,52,0.12);
+}
+
+/* ABSENT */
+.status-buttons label:has(input[value="Absent"]) {
+    color: #b91c1c;
+}
+
+.status-buttons label:has(input[value="Absent"]:checked) {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #991b1b;
+    box-shadow: 0 4px 12px rgba(153,27,27,0.12);
+}
+
+/* LEAVE */
+.status-buttons label:has(input[value="Leave"]) {
+    color: #b45309;
+}
+
+.status-buttons label:has(input[value="Leave"]:checked) {
+    background: #fef3c7;
+    border-color: #fcd34d;
+    color: #92400e;
+    box-shadow: 0 4px 12px rgba(146,64,14,0.12);
 }
 
 
@@ -503,15 +766,30 @@ tr:hover {
     padding: 12px;
     border: none;
     border-radius: 10px;
-    background: #5146e5;
+
+    background: linear-gradient(
+        135deg,
+        #5146e5,
+        #4338ca
+    );
+
     color: white;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
-.save-btn:hover,
-.primary-btn:hover {
-    background: #4338ca;
+.save-btn:hover {
+    background: linear-gradient(
+        135deg,
+        #4338ca,
+        #3730a3
+    );
+
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(79,70,229,0.25);
 }
 
 
@@ -691,4 +969,64 @@ td[id^="check-out-"] .check-btn:hover {
 .no-check {
     color: #9ca3af;
     font-weight: 600;
+}
+
+/* ============================= */
+/* EDIT STATUS DROPDOWN */
+/* ============================= */
+
+.status-edit {
+    min-width: 105px;
+    padding: 8px 32px 8px 11px;
+
+    border: 1px solid #c7d2fe;
+    border-radius: 9px;
+
+    background: #eef2ff;
+    color: #2539f4;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+    outline: none;
+
+    appearance: auto;
+    transition: 0.2s ease;
+
+    box-shadow: 0 3px 10px rgba(37, 57, 244, 0.08);
+}
+
+.status-edit:hover {
+    background: #e0e7ff;
+    border-color: #a5b4fc;
+}
+
+.status-edit:focus {
+    border-color: #2665ec;
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(38, 101, 236, 0.12);
+}
+.status-edit option {
+    background: #ffffff;
+    color: #172033;
+    font-weight: 600;
+}
+
+.status-edit option[value="Present"] {
+    color: #166534;
+}
+
+.status-edit option[value="Absent"] {
+    color: #991b1b;
+}
+
+.status-edit option[value="Leave"] {
+    color: #92400e;
+}
+
+.status-edit option[value="Late"] {
+    color: #1d4ed8;
 }
