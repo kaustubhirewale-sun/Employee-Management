@@ -45,11 +45,13 @@
 
 
 
-    {% if error %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
         <div class="login-error">
-            {{ error }}
+            {{ message }}
         </div>
-    {% endif %}
+    {% endfor %}
+{% endwith %}
 
     <form action="/login" method="POST">
             <input type="hidden" name="role" id="selected-role" value="admin">

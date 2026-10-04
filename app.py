@@ -262,7 +262,6 @@ def register_user():
 
     # Keep role when returning to login
     return redirect(f'/?role={role}')
-
 # ---------------- LOGIN CHECK ----------------
 @app.route('/login', methods=['POST'])
 def do_login():
@@ -288,25 +287,18 @@ def do_login():
 
     # Wrong username or password
     if not user or not check_password_hash(user['password'], password):
-        return render_template(
-            'login.html',
-            error="Wrong username or password."
-        )
-        # User selected wrong portal
+        flash("Wrong username or password.", "error")
+        return redirect(f'/?role={selected_role}')
 
+    # User selected wrong portal
     if user['role'] != selected_role:
 
         if selected_role == 'employee':
-            return render_template(
-                'login.html',
-                error="Employee username does not exist."
-            )
-
+            flash("Employee username does not exist.", "error")
         else:
-            return render_template(
-                'login.html',
-                error="Admin username does not exist."
-            )
+            flash("Admin username does not exist.", "error")
+
+        return redirect(f'/?role={selected_role}')
 
     print("LOGIN USERNAME:", user['username'])
     print("EMPLOYEE ID:", user['employee_id'])
@@ -332,7 +324,11 @@ def do_login():
     elif user['role'] == 'employee':
 
         if not user['employee_id']:
-            return "Employee account is not linked to an employee record.", 404
+            flash(
+                "Employee account is not linked to an employee record.",
+                "error"
+            )
+            return redirect(f'/?role={selected_role}')
 
         session.clear()
 
@@ -343,13 +339,15 @@ def do_login():
 
         return redirect('/employee-dashboard')
 
-    return render_template(
-        'login.html',
-        error="Invalid user role."
-    )
+    flash("Invalid user role.", "error")
+    return redirect(f'/?role={selected_role}')
 
 
-
+# ---------------- LOGOUT ----------------
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
 
 @app.route('/dashboard')
 def dashboard():
@@ -3114,10 +3112,10 @@ def submit_leave():
     if attachment and attachment.filename:
 
         filename = secure_filename(attachment.filename)
+
         attachment.save(
             os.path.join(UPLOAD_FOLDER, filename)
         )
-
 
     # -----------------------------------------------------
     # INSERT LEAVE REQUEST
@@ -3157,7 +3155,7 @@ def submit_leave():
 
     return redirect('/employee-leave')
 
-cursor = db.cursor(dictionary=True)
+
 # =========================================================
 # VIEW LEAVE ATTACHMENT
 # =========================================================
@@ -3177,13 +3175,11 @@ def view_attachment(filename):
 
     return send_file(
         file_path,
-        mimetype='application/pdf',
         as_attachment=False
     )
 
 
-
 # ---------------- RUN APP ----------------
-if __name__ == '__main__':
- app.run(host="0.0.0.0",port=5000,debug=True)
 
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000, debug=True)

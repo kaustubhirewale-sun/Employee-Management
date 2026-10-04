@@ -284,17 +284,27 @@ button[type="submit"]:active {
 .auth-link a:hover{
     color:#4338ca;
 }
+.login-error {
+    margin: 10px 0 12px;
+    padding: 9px 14px;
 
-/* Error Message */
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
 
-.login-error{
-    background:#fef2f2;
+    background: rgba(254, 242, 242, 0.55);
+    border: 1px solid rgba(220, 38, 38, 0.18);
+    border-radius: 10px;
 
-    border-left:4px solid #ef4444;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 
-    color:#b91c1c;
+    box-shadow:
+        0 4px 15px rgba(220, 38, 38, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
 
-    padding:14px;
+  
 }
 /* Signup Header if used */
 
