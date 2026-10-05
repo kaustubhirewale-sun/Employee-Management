@@ -13,7 +13,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-                sh 'docker compose build'
+                bat 'docker compose build'
             }
         }
 
@@ -21,8 +21,8 @@ pipeline {
             steps {
                 echo 'Deploying Employee Management System...'
 
-                sh '''
-                    docker compose down || true
+                bat '''
+                    docker compose down
                     docker compose up -d
                 '''
             }
