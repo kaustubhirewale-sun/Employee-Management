@@ -1,3 +1,4 @@
+groovy
 pipeline {
     agent any
 
@@ -17,7 +18,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
-               bat 'docker-compose build'
+                bat 'docker-compose build'
             }
         }
 
@@ -28,6 +29,14 @@ pipeline {
                 bat '''
                     docker-compose down
                     docker-compose up -d
+                '''
+
+                echo 'Waiting for MySQL to become healthy...'
+
+                bat '''
+                    docker-compose ps
+                    timeout /t 20 /nobreak
+                    docker-compose ps
                 '''
             }
         }
@@ -43,3 +52,4 @@ pipeline {
         }
     }
 }
+
