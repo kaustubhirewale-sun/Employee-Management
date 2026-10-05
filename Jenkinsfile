@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                echo 'Checking out Employee Management project...'
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+                sh 'docker compose build'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying Employee Management System...'
+
+                sh '''
+                    docker compose down || true
+                    docker compose up -d
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Employee Management System deployed successfully!'
+        }
+
+        failure {
+            echo 'Deployment failed. Check the Jenkins console output.'
+        }
+    }
+}
