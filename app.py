@@ -692,6 +692,61 @@ def register():
         departments=departments
     )
 
+def generate_employee_code(dept_id, exclude_employee_id=None):
+    # Get the selected department's name
+    cursor.execute("""
+        SELECT dept_name
+        FROM departments
+        WHERE dept_id = %s
+    """, (dept_id,))
+
+    department = cursor.fetchone()
+
+    if not department:
+        raise ValueError("Please select a valid department.")
+
+    dept_name = department["dept_name"].strip()
+
+    # Keep only words; ignore symbols such as &
+    words = [
+        word for word in dept_name.replace("&", " ").split()
+        if word.lower() != "and"
+    ]
+
+    if not words:
+        raise ValueError("Department name cannot be empty.")
+
+    # One-word department: first 3 letters
+    # Multiple-word department: initials
+    if len(words) == 1:
+        prefix = words[0][:3].upper()
+    else:
+        prefix = "".join(word[0] for word in words).upper()
+
+    # Find codes already used with this prefix
+    sql = """
+        SELECT employee_code
+        FROM employees
+        WHERE employee_code LIKE %s
+    """
+    params = [prefix + "%"]
+
+    if exclude_employee_id is not None:
+        sql += " AND id != %s"
+        params.append(exclude_employee_id)
+
+    cursor.execute(sql, tuple(params))
+
+    existing_codes = {
+        row["employee_code"] for row in cursor.fetchall()
+    }
+
+    number = 1
+    while f"{prefix}{number:03d}" in existing_codes:
+        number += 1
+
+    return f"{prefix}{number:03d}"
+
 
 
 # ---------------- SAVE EMPLOYEE ----------------
@@ -707,7 +762,7 @@ def save_employee():
     join_date = request.form['join_date']
     birth_date = request.form['birth_date']
 
-    employee_code = 'EMP' + phone[-4:]
+    employee_code = generate_employee_code(dept_id)
 
     sql = """
         INSERT INTO employees
@@ -803,11 +858,13 @@ def edit_employee(id):
         emp=emp,
         departments=departments
     )
+
+# ---------------- UPDATE EMPLOYEE ----------------
+
 @app.route('/update-employee/<int:id>', methods=['POST'])
 def update_employee(id):
 
     try:
-
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         email = request.form.get('email')
@@ -817,9 +874,34 @@ def update_employee(id):
         join_date = request.form.get('join_date')
         birth_date = request.form.get('birth_date')
 
+        # Get the employee's current department and code
+        cursor.execute("""
+            SELECT dept_id, employee_code
+            FROM employees
+            WHERE id = %s
+        """, (id,))
+
+        current_employee = cursor.fetchone()
+
+        if not current_employee:
+            return "Employee not found", 404
+
+        # Keep the current code unless the department changes
+        employee_code = current_employee['employee_code']
+
+        if str(current_employee['dept_id']) != str(dept_id):
+
+            # Generate a code based on the new department
+            employee_code = generate_employee_code(
+                dept_id,
+                exclude_employee_id=id
+            )
+
+        # Update employee details
         cursor.execute("""
             UPDATE employees
             SET
+                employee_code = %s,
                 first_name = %s,
                 last_name = %s,
                 email = %s,
@@ -830,6 +912,7 @@ def update_employee(id):
                 birth_date = %s
             WHERE id = %s
         """, (
+            employee_code,
             first_name,
             last_name,
             email,
@@ -846,14 +929,13 @@ def update_employee(id):
         return redirect('/employees')
 
     except Exception as e:
-
         db.rollback()
 
         print("Update employee error:", e)
 
         return f"""
-        <h2>Error updating employee</h2>
-        <pre>{e}</pre>
+            <h2>Error updating employee</h2>
+            <pre>{e}</pre>
         """, 500
 # ---------------- DELETE EMPLOYEE ----------------
 @app.route('/delete-employee/<int:id>')
